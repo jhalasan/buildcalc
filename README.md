@@ -1,56 +1,30 @@
-# Welcome to your Expo app 👋
+# Buildcalc
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Buildcalc estimates concrete quantities and material costs for rectangular construction components. It supports footings, beams, columns, slabs, walls, and custom pours.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run the app
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Open the QR code in Expo Go, or press `w` in the terminal to open the web version.
 
-### Other setup steps
+## Use the calculator
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+1. Select a component and enter its length, width, height (or slab thickness), and quantity in metres.
+2. Adjust the cement:sand:aggregate mix ratio if needed. The default is `1:2:4`.
+3. Enter material prices in Philippine pesos (PHP): cement per 50 kg bag, sand per cubic metre, and aggregate per cubic metre.
+4. Review the live volume, material takeoff, line costs, and estimated materials total in Philippine pesos.
 
-## Learn more
+All prices and cost summaries use Philippine pesos (PHP) with `en-PH` number formatting. Currency cannot be changed.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Estimate assumptions
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Concrete volume is `length x width x height x quantity`.
+- Dry material volume is estimated as concrete volume x `1.54`.
+- Cement volume uses the cement share of the entered mix ratio and an assumed bulk density of `1,440 kg/m^3`.
+- Cement is rounded up to whole 50 kg bags; the cement cost uses that whole-bag quantity.
+- Sand and aggregate are shown and priced by their estimated cubic-metre quantities.
+- The estimate is for materials only. It does not include labor or reinforcement and does not subtract wall openings. Confirm quantities and mix design with a construction professional before ordering.

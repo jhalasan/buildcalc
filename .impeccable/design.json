@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-06T00:00:00Z",
+  "title": "Design System: Buildcalc",
+  "extensions": {
+    "colorMeta": {
+      "yellow": { "role": "primary", "displayName": "Job-Site Yellow", "canonical": "#ffc21a", "tonalRamp": ["#4d3a08", "#7a5c0d", "#a37a10", "#cc9a14", "#ffc21a", "#ffd34f", "#ffe289", "#fff1c4"] },
+      "charcoal": { "role": "neutral", "displayName": "Site Charcoal", "canonical": "#1d2125", "tonalRamp": ["#0e1012", "#1d2125", "#272c31", "#3a4046", "#51575d", "#85898d", "#b9bdc1", "#f6f4ec"] },
+      "ground": { "role": "neutral", "displayName": "Warm Concrete", "canonical": "#ecebe5", "tonalRamp": ["#51575d", "#85898d", "#b8b6ad", "#dcdad1", "#e6e4dc", "#ecebe5", "#f5f4ef", "#ffffff"] },
+      "error": { "role": "semantic", "displayName": "Error", "canonical": "#b3261e", "tonalRamp": ["#3b1f1c", "#7a1a14", "#b3261e", "#d6564e", "#ffb4ab", "#fbe9e7"] },
+      "adjusted": { "role": "semantic", "displayName": "Adjusted Amber", "canonical": "#7a4b00", "tonalRamp": ["#3a2e12", "#7a4b00", "#b07a1e", "#ffc76b", "#ffefc7"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Masthead headline only." },
+      "big-figure": { "displayName": "Big Figure", "purpose": "Totals and key quantities, tabular." },
+      "label": { "displayName": "Label", "purpose": "Field labels, counts, tags; sentence case." }
+    },
+    "shadows": [
+      { "name": "soft-lift-web", "value": "0 1px 2px rgba(20,23,26,0.06), 0 4px 12px rgba(20,23,26,0.05)", "purpose": "Light-mode white surface cards (web)." },
+      { "name": "soft-lift-native", "value": "opacity 0.07, radius 8, offset 0 2, elevation 1", "purpose": "Light-mode white surface cards (native). None in dark mode." }
+    ],
+    "motion": [
+      { "name": "press", "value": "opacity 0.85, scale 0.98", "purpose": "Pressed state on buttons." }
+    ],
+    "breakpoints": [
+      { "name": "sheet-max-width", "value": "640px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main action; yellow with ink label.",
+      "html": "<button class=\"ds-btn-primary\">Add to estimate</button>",
+      "css": ".ds-btn-primary { background: #ffc21a; color: #14171a; min-height: 56px; padding: 0 20px; border: 1.5px solid transparent; border-radius: 14px; font-family: Barlow, sans-serif; font-weight: 700; font-size: 17px; cursor: pointer; transition: opacity .15s, transform .15s; } .ds-btn-primary:hover { opacity: .92; } .ds-btn-primary:active { opacity: .85; transform: scale(.98); } .ds-btn-primary:focus-visible { outline: 2px solid #14171a; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary action; outlined.",
+      "html": "<button class=\"ds-btn-secondary\">Clear</button>",
+      "css": ".ds-btn-secondary { background: transparent; color: #14171a; min-height: 56px; padding: 0 20px; border: 1.5px solid #85898d; border-radius: 14px; font-family: Barlow, sans-serif; font-weight: 700; font-size: 17px; cursor: pointer; } .ds-btn-secondary:active { transform: scale(.98); opacity: .85; } .ds-btn-secondary:focus-visible { outline: 2px solid #14171a; outline-offset: 2px; }"
+    },
+    {
+      "name": "Option Chip",
+      "kind": "chip",
+      "refersTo": "option-chip",
+      "description": "Radio pill; selected state fills yellow.",
+      "html": "<span class=\"ds-chip\">Class A</span> <span class=\"ds-chip ds-chip-on\">Class B</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; min-height: 48px; padding: 0 16px; border-radius: 999px; border: 1.5px solid #dcdad1; background: #f5f4ef; color: #14171a; font-family: Barlow, sans-serif; font-weight: 600; font-size: 15px; } .ds-chip:hover { background: #e6e4dc; } .ds-chip-on { background: #ffc21a; border-color: #14171a; font-weight: 700; }"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Large numeric input with unit affix.",
+      "html": "<label class=\"ds-field\"><span>Length</span><div class=\"ds-field-wrap\"><input value=\"4.5\"><em>m</em></div></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; font-family: Barlow, sans-serif; font-weight: 600; font-size: 13px; color: #51575d; } .ds-field-wrap { display: flex; align-items: center; min-height: 56px; padding: 0 14px; background: #fff; border: 1.5px solid #85898d; border-radius: 14px; } .ds-field-wrap:focus-within { border: 2px solid #14171a; } .ds-field input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-family: Barlow, sans-serif; font-weight: 700; font-size: 20px; font-variant-numeric: tabular-nums; color: #14171a; } .ds-field em { font-style: normal; font-weight: 600; font-size: 16px; margin-left: 6px; }"
+    },
+    {
+      "name": "Work Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Home work-section entry with yellow icon tile.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-tile\"></div><div><strong>Concrete Works</strong><small>Slabs, footings, columns</small></div></div>",
+      "css": ".ds-card { display: flex; align-items: center; gap: 14px; min-height: 96px; padding: 16px; background: #fff; border-radius: 20px; font-family: Barlow, sans-serif; box-shadow: 0 1px 2px rgba(20,23,26,.06), 0 4px 12px rgba(20,23,26,.05); color: #14171a; } .ds-card:hover { background: #e6e4dc; } .ds-card strong { display: block; font-size: 18px; font-weight: 700; } .ds-card small { font-size: 13px; color: #51575d; } .ds-tile { width: 60px; height: 60px; border-radius: 18px; background: #ffc21a; }"
+    },
+    {
+      "name": "Tab Bar Item",
+      "kind": "nav",
+      "refersTo": "tab-active-pill",
+      "description": "Bottom tab; active shows yellow pill.",
+      "html": "<div class=\"ds-tab\"><span class=\"ds-pill\"></span><span>Home</span></div>",
+      "css": ".ds-tab { display: flex; flex-direction: column; align-items: center; gap: 3px; min-height: 56px; font-family: Barlow, sans-serif; font-weight: 700; font-size: 13px; color: #14171a; } .ds-pill { width: 64px; height: 32px; border-radius: 16px; background: #ffc21a; }"
+    },
+    {
+      "name": "Adjusted Tag",
+      "kind": "chip",
+      "refersTo": "tag-adjusted",
+      "description": "Marks a wastage-adjusted quantity.",
+      "html": "<span class=\"ds-tag\">Adjusted</span>",
+      "css": ".ds-tag { display: inline-block; padding: 3px 10px; border-radius: 999px; background: #ffefc7; color: #7a4b00; font-family: Barlow, sans-serif; font-weight: 600; font-size: 13px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Site Tool",
+    "overview": "Buildcalc looks and handles like equipment, not a worksheet. Job-site yellow is the single loud voice, set against a charcoal masthead and warm concrete-grey ground. Inputs and targets are oversized for one-handed, gloved use outdoors; the live total travels with the thumb instead of sitting at the foot of a document. This build replaces the earlier flat, square, no-shadow ruled-paper \"Site Fieldbook\" world.",
+    "keyCharacteristics": [
+      "Yellow (#ffc21a) is the action and selection color; charcoal is the anchor surface.",
+      "Barlow Condensed for display and numeric figures, Barlow for everything else.",
+      "10/14/20px radii with pill chips; softly lifted white cards on warm grey.",
+      "One stenciled-line icon family (BuildcalcIcon), placed in rounded icon tiles.",
+      "Light and dark schemes, both first-class."
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "Yellow marks what you can act on or what is selected. It never decorates; on white it is a fill with dark ink, never a text color. Yellow text appears only on charcoal.", "section": "colors" },
+      { "name": "The Ink-On-Yellow Rule", "body": "Every yellow fill takes #14171a text or icon.", "section": "colors" },
+      { "name": "The Tabular Rule", "body": "Any number a user compares or sums (quantities, pesos, totals) uses tabular-nums.", "section": "typography" },
+      { "name": "The Soft-Lift Rule", "body": "Only white surface cards lift, and only softly and in light mode. No hard offset shadows; no glow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep primary targets at 56px (chips 48px) and make yellow the only action color.",
+      "Do put ink on every yellow fill and use tabular figures for all numbers.",
+      "Do build new surfaces from Screen, Card, Txt variants, Button, Field, Options, Tag, IconTile in src/components/ui/kit.tsx; read colors through useColors, never hard-code hex.",
+      "Do design every surface for both light and dark schemes.",
+      "Do use BuildcalcIcon stencil icons at 20-24px, inside tiles for section identity."
+    ],
+    "donts": [
+      "Don't return to the flat, square, no-shadow ruled-paper look; corners below 10px and document-with-tabs layouts are off-system.",
+      "Don't use yellow as text on light surfaces or as a decorative accent.",
+      "Don't add hard offset shadows, glows, or shadows in dark mode.",
+      "Don't introduce a third typeface or system display faces.",
+      "Don't add unicode or emoji glyph icons."
+    ]
+  }
+}

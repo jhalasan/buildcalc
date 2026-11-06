@@ -1,0 +1,12 @@
+<!-- @dsCard group="Lists" height=260 -->
+<!doctype html>
+<html data-theme="light">
+<head><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="bundle.css"><script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script><script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script><script src="bundle.js"></script><meta charset="utf-8"></head>
+<body>
+<div id="root" class="bc-root bc-card bc-card-col"></div>
+<script>
+  var B = window.Buildcalc, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h('div',{className:'bc-list'},h(B.ListRow,{number:'01',title:'Concreting Works',meta:'8 calculators',expanded:true}),h(B.ListRow,{title:'Footing',sub:true}),h(B.ListRow,{number:'02',title:'Masonry Works',meta:'4 calculators',expanded:false}),h(B.ListRow,{number:'03',title:'Steel Reinforcement Works',off:true}))));
+</script>
+</body>
+</html>

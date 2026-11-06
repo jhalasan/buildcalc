@@ -8,32 +8,38 @@ adaptive
 
 ## Users
 
-The primary user is not yet specified. The first workflow supports people estimating concrete material requirements for construction components.
+The primary user is not yet specified. The initial workflow supports people estimating materials for concrete and masonry work in the Philippines.
 
 ## Product Purpose
 
-Buildcalc estimates concrete volume, material quantities, and material cost from component dimensions, quantity, and locally entered material prices.
+Buildcalc estimates construction material quantities and cost from measured work, reference factors, and user-entered Philippine peso unit prices.
 
 ## Positioning
 
-No differentiated market position has been confirmed. The initial focus is a straightforward estimate with visible quantities and user-supplied prices.
+No differentiated market position has been confirmed. The initial focus is a straightforward estimate with visible quantities, explicit assumptions, and user-supplied unit prices. The shared construction-estimate workbook is a reference for initial concrete and masonry modules, not a verified engineering standard.
 
 ## Operating Context
 
-The initial workflow is a quick, mobile-friendly estimate: choose a construction component, enter its dimensions and quantity, enter material prices, and review quantities and total material cost.
+The initial workflow is a quick, mobile-friendly estimate: choose a construction module and calculator, enter its measurements, review takeoff quantities, enter material prices, and review line costs and the total.
 
 ## Capabilities and Constraints
 
-- Support footings, beams, columns, slabs, walls, and custom rectangular concrete pours.
-- Calculate gross rectangular volume from length, width, height, and quantity. Slab thickness is entered as height.
-- Use a nominal cement:sand:aggregate ratio of 1:2:4 by default, with an editable ratio.
-- Estimate dry material volume using a 1.54 multiplier; convert cement volume at an assumed bulk density of 1,440 kg/m³.
-- Report and price cement as whole 50 kg bags rounded up; report and price sand and aggregate in cubic metres.
-- Let users enter cement price per bag and sand and aggregate prices per cubic metre, all in Philippine pesos (PHP).
+- Concreting: footings, wall footings, floor slabs by dimensions or area, rectangular and circular columns, beams, and stairs.
+- Use workbook concrete class factors for slabs: AA (`1:1.5:3`, 12 cement bags/m³), A (`1:2:4`, 9 bags/m³), and B (`1:3:6`, 7.5 bags/m³). Non-slab concrete calculators use Class A factors.
+- Estimate concrete sand at 0.5 m³ and gravel at 1 m³ per m³ of concrete, rounding these quantities up to 0.1 m³.
+- Masonry: CHB wall count with openings and breakage allowance, 4-inch or 6-inch CHB mortar, one- or two-face plaster, and riprap.
+- Use the workbook's wall, mortar, plaster, and riprap factors as planning references, and disclose their assumptions in the estimate.
+- Let users enter unit prices for listed materials in Philippine pesos (PHP), edit final material quantities, and see each material subtotal.
+- Offer optional per-material wastage input, defaulting to zero; apply it to calculated quantities and round bags and pieces up to whole purchase units. Do not apply a second allowance to CHB wall counts, which already include breakage.
+- Label the total **Total Estimated Material Cost** and disclose that labor, equipment, overhead, and other construction expenses are excluded.
 - Format quantities and costs consistently with the Philippine English locale (`en-PH`); currency is fixed to PHP.
-- Estimates cover concrete materials only. Do not include labor or reinforcement, or subtract openings from gross wall volume.
-- Currency is standardized to Philippine pesos (PHP); quantities and costs use `en-PH` formatting.
-- Filipino language support and region-specific material rates have not been provided.
+- Steel reinforcement: CHB wall bars, footing matting, wall footing, rectangular and circular columns, one- and two-bay beams, one- and two-way slabs, wide-spacing ground slab, and stair bars, counted in 6 m bars with #16 tie wire per the workbook.
+- Carpentry: lumber and round-log board feet, studs and nailing joists, and plywood covering with nails.
+- Roofing: two- or three-sheet roof runs (8, 10, or 12 ft sheets) with umbrella nails, and roof accessories.
+- Tiling: 16 tile sizes with the workbook's breakage-inclusive piece count, cement mortar or adhesive, and white cement. Painting: gallons from area, coverage, and coats. Scaffoldings and forms: column forms, beam forms, and staging lumber.
+- Each workbook-based module shows its factors as assumptions. Where the workbook has an apparent error or an unused input, the assumptions say how the estimate differs (two-bay beam stirrups and bottom bars, painting coat multiplier, footing matting rounding, one calculator per log count). Concrete canal is not included.
+- Estimates do not include labor, structural design, reinforcement quantities, or supplier rates. Wall area in masonry calculations subtracts entered window and door openings.
+- Filipino language support, independently validated engineering factors, and region-specific material rates have not been provided.
 
 ## Brand Commitments
 
@@ -41,11 +47,11 @@ The product name is Buildcalc.
 
 ## Evidence on Hand
 
-The existing application is an Expo SDK 58 React Native project. No domain data, rate schedules, or regional standards have been provided.
+The existing application is an Expo SDK 58 React Native project. No domain data, supplier rate schedules, or independently validated local construction standards have been provided. A user-supplied workbook provides reference estimating factors for the initial modules.
 
 ## Product Principles
 
-- Show the assumptions behind estimated quantities.
+- Show the assumptions and source character behind estimated quantities.
 - Use dimensions and prices supplied by the user.
-- Keep estimates understandable and useful across common rectangular concrete components.
-- Do not imply that a material estimate includes labor, reinforcement, or wall-opening deductions.
+- Keep estimates understandable and useful across common concrete and masonry work.
+- Do not imply that a material estimate includes labor or reinforcement.

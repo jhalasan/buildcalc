@@ -1,0 +1,12 @@
+<!-- @dsCard group="Lists" height=220 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+<div id="root" class="bc-root bc-card bc-card-col"></div>
+<script>
+  var B = window.Buildcalc, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h(B.SettingRow,{title:'Measurement system',value:'Metric',fixed:true}),h(B.SettingRow,{title:'Default wastage',meta:'Starting value for new materials.',control:h(B.InputField,{label:'Default wastage',hideLabel:true,unit:'%',value:'0'})})));
+</script>
+</body>
+</html>

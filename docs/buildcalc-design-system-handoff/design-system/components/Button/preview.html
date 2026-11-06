@@ -1,0 +1,12 @@
+<!-- @dsCard group="Actions" height=200 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+<div id="root" class="bc-root bc-card bc-card-col"></div>
+<script>
+  var B = window.Buildcalc, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h('div',{className:'bc-actions'},h(B.Button,{variant:'primary',icon:'plus'},'Add to estimate'),h(B.Button,{variant:'secondary',icon:'pencil'},'Edit prices')), h('div',{className:'bc-actions'},h(B.Button,{variant:'danger',icon:'clear'},'Clear estimate'),h(B.Button,{variant:'primary',disabled:true},'View results'))));
+</script>
+</body>
+</html>

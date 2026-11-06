@@ -1,0 +1,12 @@
+<!-- @dsCard group="Lists" height=260 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+<div id="root" class="bc-root bc-card bc-card-col"></div>
+<script>
+  var B = window.Buildcalc, h = React.createElement;
+  ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, h('div',{className:'bc-list'},h(B.ListRow,{number:'01',title:'Concreting Works',meta:'8 calculators',expanded:true}),h(B.ListRow,{title:'Footing',sub:true}),h(B.ListRow,{number:'02',title:'Masonry Works',meta:'4 calculators',expanded:false}),h(B.ListRow,{number:'03',title:'Steel Reinforcement Works',off:true}))));
+</script>
+</body>
+</html>

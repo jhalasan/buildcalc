@@ -29,6 +29,12 @@ export function formatMoney(value: number): string {
   }).format(value);
 }
 
+/** "Cement · per 50 kg bag" becomes "Price per 50 kg bag" where the material is already named nearby. */
+export function priceFieldLabel(unitPriceLabel: string): string {
+  const parts = unitPriceLabel.split(' · ');
+  return parts.length > 1 ? `Price ${parts.slice(1).join(' · ')}` : unitPriceLabel;
+}
+
 export type TakeoffAdjustments = {
   overrides: EstimateValues;
   wastage: EstimateValues;

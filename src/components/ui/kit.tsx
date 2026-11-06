@@ -173,6 +173,7 @@ export function Button({
         <BuildcalcIcon color={disabled ? disabledFg : palette.fg} name={icon} size={20} />
       ) : null}
       <Text
+        maxFontSizeMultiplier={1.3}
         style={[
           styles.buttonLabel,
           { color: disabled ? disabledFg : palette.fg },

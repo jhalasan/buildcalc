@@ -111,6 +111,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {count === 0 ? (
         <Card style={{ gap: 14 }}>
           <Txt v="heading">How it works</Txt>
           {STEPS.map((step, index) => (
@@ -129,6 +130,7 @@ export default function HomeScreen() {
             </View>
           ))}
         </Card>
+        ) : null}
 
         <View style={styles.notice}>
           <BuildcalcIcon color={c.inkMuted} name="info" size={20} />

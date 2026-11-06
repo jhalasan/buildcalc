@@ -47,7 +47,7 @@ export default function SettingsScreen() {
           <InfoRow icon="calculators" label="Currency" value="Philippine peso (₱)" />
         </Card>
         <Txt tone="muted" v="caption">
-          Both are fixed in Phase 1. Quantities and costs use the en-PH number format.
+          Both are fixed. Quantities and costs use the en-PH number format.
         </Txt>
       </View>
 
@@ -73,8 +73,8 @@ export default function SettingsScreen() {
           <Divider />
           <Txt tone="muted" v="caption">
             Buildcalc estimates material quantities and material cost only, from dimensions and unit
-            prices you enter. Labor, equipment, overhead, reinforcement, and other construction
-            expenses are excluded. Estimates are temporary and are not saved.
+            prices you enter. Labor, equipment, overhead, and other construction expenses are
+            excluded. Estimates are temporary and are not saved.
           </Txt>
           <Txt tone="muted" v="caption">
             Workbook-based planning estimates, not engineering approval. Verify material quantities,

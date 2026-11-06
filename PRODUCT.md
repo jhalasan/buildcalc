@@ -8,7 +8,7 @@ adaptive
 
 ## Users
 
-The primary user is not yet specified. The initial workflow supports people estimating materials for concrete and masonry work in the Philippines.
+The primary user is not yet specified. The initial workflow supports people estimating construction materials in the Philippines across concreting, masonry, steel reinforcement, carpentry, roofing, tiling, painting, and forms.
 
 ## Product Purpose
 
@@ -16,7 +16,7 @@ Buildcalc estimates construction material quantities and cost from measured work
 
 ## Positioning
 
-No differentiated market position has been confirmed. The initial focus is a straightforward estimate with visible quantities, explicit assumptions, and user-supplied unit prices. The shared construction-estimate workbook is a reference for initial concrete and masonry modules, not a verified engineering standard.
+No differentiated market position has been confirmed. The initial focus is a straightforward estimate with visible quantities, explicit assumptions, and user-supplied unit prices. The shared construction-estimate workbook is the reference for every module, not a verified engineering standard.
 
 ## Operating Context
 
@@ -38,7 +38,7 @@ The initial workflow is a quick, mobile-friendly estimate: choose a construction
 - Roofing: two- or three-sheet roof runs (8, 10, or 12 ft sheets) with umbrella nails, and roof accessories.
 - Tiling: 16 tile sizes with the workbook's breakage-inclusive piece count, cement mortar or adhesive, and white cement. Painting: gallons from area, coverage, and coats. Scaffoldings and forms: column forms, beam forms, and staging lumber.
 - Each workbook-based module shows its factors as assumptions. Where the workbook has an apparent error or an unused input, the assumptions say how the estimate differs (two-bay beam stirrups and bottom bars, painting coat multiplier, footing matting rounding, one calculator per log count). Concrete canal is not included.
-- Estimates do not include labor, structural design, reinforcement quantities, or supplier rates. Wall area in masonry calculations subtracts entered window and door openings.
+- Estimates do not include labor, equipment, overhead, structural design, or supplier rates. Wall area in masonry calculations subtracts entered window and door openings.
 - Filipino language support, independently validated engineering factors, and region-specific material rates have not been provided.
 
 ## Brand Commitments
@@ -53,5 +53,5 @@ The existing application is an Expo SDK 58 React Native project. No domain data,
 
 - Show the assumptions and source character behind estimated quantities.
 - Use dimensions and prices supplied by the user.
-- Keep estimates understandable and useful across common concrete and masonry work.
-- Do not imply that a material estimate includes labor or reinforcement.
+- Keep estimates understandable and useful across the eight work sections.
+- Do not imply that a material estimate includes labor, equipment, or overhead.

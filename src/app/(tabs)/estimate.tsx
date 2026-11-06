@@ -5,11 +5,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import BuildcalcIcon from '@/components/buildcalc-icon';
 import { Button, Card, Divider, Field, IconTile, Tag, Txt } from '@/components/ui/kit';
-import { Screen } from '@/components/ui/screen';
+import { Screen, useSheetWidth } from '@/components/ui/screen';
 import { useColors } from '@/hooks/use-colors';
 import { useEstimateSummary } from '@/hooks/use-estimate-summary';
 import { useEstimateStore } from '@/store/estimate-store';
-import { formatMoney, formatNumber, formatQuantity, parseNumber } from '@/utils/estimate-lines';
+import {
+  formatMoney,
+  formatNumber,
+  formatQuantity,
+  parseNumber,
+  priceFieldLabel,
+} from '@/utils/estimate-lines';
 
 type CombinedMaterial = {
   id: string;
@@ -26,12 +32,20 @@ export default function EstimateScreen() {
   const { prices, setPrice, removeTakeoff, clearEstimate } = useEstimateStore();
   const estimate = useEstimateSummary();
   const [confirmClear, setConfirmClear] = useState(false);
+  const [confirmRemoveId, setConfirmRemoveId] = useState<string | undefined>();
+  const sheetWidth = useSheetWidth();
 
   useEffect(() => {
     if (!confirmClear) return;
     const timer = setTimeout(() => setConfirmClear(false), 4000);
     return () => clearTimeout(timer);
   }, [confirmClear]);
+
+  useEffect(() => {
+    if (!confirmRemoveId) return;
+    const timer = setTimeout(() => setConfirmRemoveId(undefined), 4000);
+    return () => clearTimeout(timer);
+  }, [confirmRemoveId]);
 
   const materials = useMemo(() => {
     const map = new Map<string, CombinedMaterial>();
@@ -95,7 +109,7 @@ export default function EstimateScreen() {
         styles.footer,
         { backgroundColor: c.charcoal, paddingBottom: Math.max(insets.bottom, 0) + 12 },
       ]}>
-      <View style={styles.footerInner}>
+      <View style={[styles.footerInner, { maxWidth: sheetWidth - 32 }]}>
         <Txt tone="onCharcoalMuted" v="label">
           Total Estimated Material Cost
         </Txt>
@@ -153,7 +167,8 @@ export default function EstimateScreen() {
                       <Field
                         compact
                         invalid={invalid}
-                        label={material.unitPriceLabel}
+                        context={material.label}
+                        label={priceFieldLabel(material.unitPriceLabel)}
                         onChangeText={(value) => setPrice(material.id, value)}
                         placeholder="Enter price"
                         prefix="₱"
@@ -233,10 +248,17 @@ export default function EstimateScreen() {
               />
               <Button
                 icon="trash"
-                label="Remove"
-                onPress={() => removeTakeoff(entry.saved.id)}
+                label={confirmRemoveId === entry.saved.id ? 'Confirm' : 'Remove'}
+                onPress={() => {
+                  if (confirmRemoveId === entry.saved.id) {
+                    removeTakeoff(entry.saved.id);
+                    setConfirmRemoveId(undefined);
+                  } else {
+                    setConfirmRemoveId(entry.saved.id);
+                  }
+                }}
                 style={{ flex: 1, minHeight: 48 }}
-                variant="secondary"
+                variant={confirmRemoveId === entry.saved.id ? 'danger' : 'secondary'}
               />
             </View>
           </Card>
@@ -289,11 +311,11 @@ const styles = StyleSheet.create({
   material: { padding: 16, gap: 10 },
   materialHead: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   priceRow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-end', gap: 12 },
-  priceField: { flexGrow: 1, flexBasis: 170, minWidth: 150 },
+  priceField: { flexGrow: 1, flexBasis: 170, minWidth: 150, maxWidth: 360 },
   cost: { minWidth: 110, minHeight: 52, justifyContent: 'center', alignItems: 'flex-end', gap: 2 },
   takeoffHead: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   lines: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 10, gap: 6 },
   lineRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  actions: { flexDirection: 'row', gap: 10 },
+  actions: { flexDirection: 'row', gap: 16 },
   notice: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', paddingHorizontal: 4 },
 });

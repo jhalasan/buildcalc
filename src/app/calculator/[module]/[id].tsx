@@ -38,6 +38,7 @@ import {
   formatNumber,
   formatQuantity,
   parseNumber,
+  priceFieldLabel,
   type EstimateLine,
 } from '@/utils/estimate-lines';
 
@@ -78,9 +79,8 @@ function CalculatorScreen({
   const [wastage, setWastage] = useState<EstimateValues>(() => saved?.wastage ?? {});
   const [showAssumptions, setShowAssumptions] = useState(false);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const exclusionText = keyboardOpen || isShort
-    ? 'Material costs only. Labor and equipment excluded.'
-    : 'Material costs only. Labor, equipment, overhead, and other construction expenses are excluded.';
+  const exclusionText =
+    'Material costs only. Labor, equipment, overhead, and other construction expenses are excluded.';
   // Reuse one id so a double tap on Add never creates two takeoffs.
   const savedIdRef = useRef<string | undefined>(saved?.id);
 
@@ -130,6 +130,14 @@ function CalculatorScreen({
       : undefined;
   useAnnounce(measurementError ?? (totalReady ? `Total Estimated Material Cost ${totalText}` : totalText));
 
+  // Live quantities in the pinned bar, so a dimension change is visible without scrolling.
+  const quantityPreview = summary
+    ? summary.lines
+        .filter((line) => line.quantity !== undefined)
+        .map((line) => `${formatQuantity(line.quantity as number, line.unit)} ${line.label}`)
+        .join(' · ')
+    : undefined;
+
   function addToEstimate() {
     savedIdRef.current = saveTakeoff({
       id: savedIdRef.current,
@@ -163,12 +171,18 @@ function CalculatorScreen({
                     v={totalReady ? 'bigFigure' : 'bodyStrong'}>
                     {totalText}
                   </Txt>
+                  {quantityPreview ? (
+                    <Txt maxFontSizeMultiplier={1.3} numberOfLines={1} tone="onCharcoalMuted" v="caption">
+                      {quantityPreview}
+                    </Txt>
+                  ) : null}
                   {isShort ? (
-                    <Txt tone="onCharcoalMuted" v="caption">
+                    <Txt maxFontSizeMultiplier={1.3} tone="onCharcoalMuted" v="caption">
                       {exclusionText}
                     </Txt>
                   ) : null}
                 </View>
+                {keyboardOpen ? null : (
                 <Button
                   accessibilityHint="Saves this takeoff to the current estimate for this session"
                   disabled={blocked}
@@ -178,9 +192,10 @@ function CalculatorScreen({
                   onPress={addToEstimate}
                   style={{ flexGrow: isShort ? 0 : 1, minWidth: isShort ? 200 : 150, minHeight: isShort ? 48 : 52 }}
                 />
+                )}
               </View>
               {isShort ? null : (
-                <Txt tone="onCharcoalMuted" v="caption">
+                <Txt maxFontSizeMultiplier={1.3} tone="onCharcoalMuted" v="caption">
                   {exclusionText}
                 </Txt>
               )}
@@ -403,9 +418,10 @@ function MaterialCard({
       </View>
 
       <Field
+        context={line.label}
         hint={`Enter the price in Philippine pesos ${line.unitPriceLabel.toLowerCase()}`}
         invalid={!line.priceValid}
-        label={line.unitPriceLabel}
+        label={priceFieldLabel(line.unitPriceLabel)}
         onChangeText={onPrice}
         placeholder="Enter price"
         prefix="₱"

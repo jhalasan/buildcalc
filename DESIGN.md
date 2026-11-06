@@ -17,6 +17,8 @@ colors:
   on-charcoal: "#f6f4ec"
   on-charcoal-muted: "#b9bdc1"
   charcoal-line: "#3a4046"
+  charcoal-wash: "rgba(255,255,255,0.07)"
+  scrim: "rgba(10,12,14,0.55)"
   error: "#b3261e"
   error-wash: "#fbe9e7"
   adjusted: "#7a4b00"
@@ -26,6 +28,8 @@ colors:
   dark-surface-alt: "#23272b"
   dark-ink: "#f4f2eb"
   dark-line: "#2e3338"
+  dark-charcoal: "#272c31"
+  dark-scrim: "rgba(0,0,0,0.65)"
 typography:
   display:
     fontFamily: "Barlow Condensed ExtraBold"
@@ -110,6 +114,9 @@ components:
   button-disabled:
     backgroundColor: "{colors.surface-alt}"
     textColor: "{colors.ink-faint}"
+  button-disabled-on-charcoal:
+    backgroundColor: "{colors.charcoal-wash}"
+    textColor: "{colors.on-charcoal-muted}"
   card:
     backgroundColor: "{colors.surface}"
     rounded: "{rounded.lg}"
@@ -139,6 +146,19 @@ components:
     textColor: "{colors.adjusted}"
     rounded: "{rounded.pill}"
     padding: "3px 10px"
+  select-trigger:
+    backgroundColor: "#ffffff"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.md}"
+    height: "56px"
+    padding: "0 14px"
+  select-sheet:
+    backgroundColor: "{colors.surface}"
+    rounded: "24px"
+  select-row:
+    textColor: "{colors.ink}"
+    rounded: "{rounded.md}"
+    height: "56px"
   tab-active-pill:
     backgroundColor: "{colors.yellow}"
     textColor: "{colors.on-yellow}"
@@ -155,7 +175,7 @@ components:
 
 Buildcalc looks and handles like equipment, not a worksheet. Job-site yellow is the single loud voice, set against a charcoal masthead and warm concrete-grey ground. Inputs and targets are oversized for one-handed, gloved use outdoors; the live total travels with the thumb instead of sitting at the foot of a document. This build replaces the earlier flat, square, no-shadow ruled-paper "Site Fieldbook" world; none of its rules (square corners, no shadow, paper rules) apply.
 
-Density is moderate and thumb-first: 56px primary controls, 48px chips, 96px work-section cards, one column capped at 640px. Numerals are condensed and tabular so quantities and pesos read like stamped figures; prose is a plain humanist sans. Depth is soft in light mode and tonal in dark mode. Pressed states are tactile (slight scale and tint).
+Density is moderate and thumb-first: 56px primary controls, 48px minimum targets everywhere, a single column capped at 640px on phones that widens and restructures on tablets. Numerals are condensed and tabular so quantities and pesos read like stamped figures; prose is a plain humanist sans. Depth is soft in light mode and tonal in dark mode. Pressed states are tactile (slight scale and tint).
 
 **Key Characteristics:**
 - Yellow (#ffc21a) is the action and selection color; charcoal is the anchor surface.
@@ -163,6 +183,7 @@ Density is moderate and thumb-first: 56px primary controls, 48px chips, 96px wor
 - 10/14/20px radii with pill chips; softly lifted white cards on warm grey.
 - One stenciled-line icon family (BuildcalcIcon), placed in rounded icon tiles.
 - Light and dark schemes, both first-class.
+- Adaptive by window size class: bottom tabs and one column on compact and medium windows, a left navigation rail and a two-pane calculator on expanded windows.
 
 ## Colors
 
@@ -176,7 +197,7 @@ A restrained palette: warm concrete neutrals plus one saturated safety yellow, w
 - **Poured White** (#ffffff light / #1a1d20 dark): cards, tab bar, fields (dark field #14171a).
 - **Sand Alt** (#f5f4ef / #23272b): unselected chips, disabled buttons, muted tags.
 - **Pressed Grey** (#e6e4dc / #2a2f34): pressed state fill.
-- **Site Charcoal** (#1d2125 light / #272c31 dark): masthead, step numbers, badges, charcoal cards; text on it is #f6f4ec with #b9bdc1 for secondary; dividers #3a4046.
+- **Site Charcoal** (#1d2125 light / #272c31 dark): masthead, sticky total bar, step numbers, badges, charcoal cards; text on it is #f6f4ec with #b9bdc1 for secondary; dividers #3a4046; a translucent white wash (rgba(255,255,255,0.07)) fills the estimate strip and disabled buttons on charcoal.
 - **Ink** (#14171a / #f4f2eb): primary text. Muted #51575d / #b5b9bd; faint #5c6167 / #9a9fa4 (placeholders, disabled).
 - **Hairline** (#dcdad1 / #2e3338): dividers and card borders (borders only visible in dark mode cards).
 - **Control Grey** (#85898d / #7a8187): resting field and secondary-button strokes.
@@ -185,6 +206,7 @@ A restrained palette: warm concrete neutrals plus one saturated safety yellow, w
 - **Error** (#b3261e / #ffb4ab) with wash (#fbe9e7 / #3b1f1c): invalid fields, danger button.
 - **Adjusted Amber** (#7a4b00 / #ffc76b) on wash (#ffefc7 / #3a2e12): the tag marking an adjusted (wastage-affected) quantity.
 - Focus ring: ink in light, yellow in dark.
+- **Scrim** (rgba(10,12,14,0.55) light / rgba(0,0,0,0.65) dark): the backdrop behind the dropdown sheet.
 
 ### Named Rules
 **The One Voice Rule.** Yellow marks what you can act on or what is selected. It never decorates; on white it is a fill with dark ink, never a text color. Yellow text appears only on charcoal.
@@ -214,7 +236,17 @@ A restrained palette: warm concrete neutrals plus one saturated safety yellow, w
 
 ## Layout
 
-Single scrolling column inside `Screen`: ground color, content centered and capped at 640px (SHEET_MAX_WIDTH), 16px side padding, 20px gap between blocks (28px between major home sections). Space scale: 4, 8, 12, 16, 20, 24, 32, 40. Fields flex with a 140px minimum so pairs wrap on narrow phones. Home goes full-bleed at the top for the masthead, then returns to 16px padding. Bottom navigation is a fixed four-tab bar under the same 640px cap, respecting safe-area insets.
+Layout follows **window size classes**, never device models: compact under 600dp, medium 600-839dp, expanded 840dp and up (Material breakpoints). Split View, multi-window, foldables, and landscape all resolve the same way. The first render always reports compact so server render and hydration match.
+
+**Compact and medium.** Single scrolling column inside `Screen`: ground color, content centered and capped at 640px, 16px side padding, 20px gap between blocks (28px between major home sections). Space scale: 4, 8, 12, 16, 20, 24, 32, 40. Number fields sit in a wrapping grid (flex-basis 150px, minimum 140px), so they pair up when there is room and stack on narrow phones. Home goes full-bleed at the top for the masthead, then returns to 16px padding. The work-section grid is one column under 340px, two columns on phones, four from 600px. Bottom navigation is a fixed four-tab bar under the same 640px cap, with safe-area insets on every edge (left and right too, for landscape).
+
+**Expanded.** Navigation becomes a 104px left rail (88px tab targets, same yellow pill and badge). Content width grows to 880px. The calculator splits into two independent scroll panes, measurements on the left (5 parts) and materials, assumptions, and the notice on the right (6 parts), under a shared header and one full-width sticky total bar (content capped at 1200px).
+
+**Short windows (under 480px high, landscape phones).** The sticky total bar collapses to one row: total and the short exclusions line on the left, a 48px button on the right.
+
+**Forms.** Calculator inputs render in declaration order. A new `group` starts a sub-heading (Beam, Top bars, Stirrups, Purchase lumber). Runs of number fields share a grid; every choice takes a full row.
+
+**Text scaling.** Body, labels, and captions scale to 1.8x, inputs to 1.6x; display, title, and big figures cap at 1.3x, tab labels at 1.3x. Display type drops to 33/36 under 360px wide.
 
 ## Elevation & Depth
 
@@ -225,7 +257,7 @@ Hybrid. In light mode, surface cards carry a soft ambient lift (web `0 1px 2px r
 
 ## Shapes
 
-Rounded and friendly but sturdy. Radius scale: sm 10, md 14 (buttons, fields, strips), lg 20 (cards, work cards), pill 999 (chips, tags). Icon tiles use 30% of their size as radius. The home masthead has 28px bottom corners. Tab active indicator is a 64x32 pill (16px). Strokes are 1.5px on controls (2px on focus or error), 1px on cards.
+Rounded and friendly but sturdy. Radius scale: sm 10, md 14 (buttons, fields, strips), lg 20 (cards, work cards), pill 999 (chips, tags). Icon tiles use 30% of their size as radius. The home masthead has 28px bottom corners. Tab active indicator is a 64x32 pill (16px). The sticky total bar and the dropdown sheet have 24px top corners (the sheet is a 24px-radius centered 520px dialog on expanded windows) and the sheet has a 40x4 grabber. Strokes are 1.5px on controls (2px on focus or error), 1px on cards.
 
 ## Components
 
@@ -233,26 +265,35 @@ Rounded and friendly but sturdy. Radius scale: sm 10, md 14 (buttons, fields, st
 - **Shape:** 14px radius, 56px minimum height, 20px horizontal padding, optional 20px leading icon.
 - **Primary:** yellow fill, ink label (Bold 17).
 - **Secondary:** transparent, 1.5px control-grey stroke, ink label. **Danger:** transparent, error stroke and label.
-- **Pressed:** opacity 0.85 and scale 0.98. **Disabled:** sand-alt fill, line stroke, faint label.
+- **Pressed:** opacity 0.85 and scale 0.98. **Disabled:** sand-alt fill, line stroke, faint label; on charcoal (the total bar) a translucent white wash, charcoal-line stroke, and muted-charcoal label so it never reads as a light slab.
 
-### Chips (Options)
-- Radio group of pills, 48px high, 1.5px stroke. Unselected: sand-alt with hairline. Selected: yellow fill, ink stroke, Bold label. Pressed: pressed grey.
+### Chips and dropdown (Choices)
+- `Choices` picks the control: up to three short options (16 characters or fewer) render as chips; anything longer renders as a dropdown.
+- **Chips:** radio group of pills, 48px high, 1.5px stroke. Unselected: sand-alt with hairline. Selected: yellow fill, ink stroke, Bold label. Pressed: pressed grey.
+- **Dropdown:** a field-styled trigger (56px, label above, chevron right, 2px focus stroke while open) that opens a bottom sheet over a scrim. The sheet has a grabber, a heading with a 48px Done button, and 56px option rows with a radio mark; the selected row has the adjusted-wash fill, Bold label, and a yellow check. Backdrop tap, Done, and the system Back all close it. Centered 520px dialog on expanded windows. Used for tile sizes, bar sizes, spacing, lumber sizes, and the work-section picker.
 
 ### Cards / Containers
-- 20px radius, 16px padding, 1px border (hairline in dark, transparent otherwise). Tones: surface (lifted), alt, charcoal. Work-section cards are 96px minimum with a 60px yellow icon tile, heading, caption, count, and chevron; pressed turns pressed-grey.
+- 20px radius, 16px padding, 1px border (hairline in dark, transparent otherwise). Tones: surface (lifted), alt, charcoal. Work-section cards sit in a responsive grid, 132px minimum high, with a 48px yellow icon tile, the section name, and a calculator count; pressed turns pressed-grey.
 
 ### Inputs / Fields
 - White (dark #14171a) fill, 14px radius, 56px high, 1.5px control-grey stroke. Label above in Label style. Unit or prefix affix in SemiBold 16 muted. Value in Bold 20 tabular.
 - **Focus:** 2px stroke in focus color. **Invalid:** 2px error stroke and error label.
 
 ### Navigation
-- Bottom tab bar, white surface, hairline top border. Icon over label (13px). Active tab: yellow 64x32 pill behind an ink icon, Bold ink label; inactive muted. The Estimate tab shows a charcoal count badge with yellow numeral. Minimum tab height 56px.
+- Bottom tab bar on compact and medium windows, a 104px left rail on expanded windows; white surface, hairline border. Icon over label (13px). Active tab: yellow 64x32 pill behind an ink icon, Bold ink label; inactive muted. The Estimate tab shows a charcoal count badge with yellow numeral. Minimum tab height 56px (64px in the rail).
+- Pushed screens have a header with a 48px circular back button and a condensed title that shrinks to fit.
+
+### Sticky total bar (signature)
+A charcoal bar with 24px top corners pinned under every calculator and the Estimate tab. It carries the full label **Total Estimated Material Cost**, the figure (Big Figure, yellow, or a status line such as "Enter 2 unit prices"), the exclusions sentence, and on calculators the Add to estimate button (Update when editing). While the keyboard is open or the window is short, the sentence shortens to "Material costs only. Labor and equipment excluded." and never disappears.
+
+### Material card
+White card per material: name and Calculated quantity on the left, the final quantity (Big Figure) and its basis on the right (No wastage added, +X% wastage, Manual quantity, Includes breakage). Below: a price field named with its unit, wastage and quantity-override fields side by side, and a sand-alt line-cost strip. Tiles and CHB show a note instead of a wastage field.
 
 ### Masthead and estimate strip (signature)
-Charcoal block with yellow brand mark and wordmark, Display headline, and a tappable strip (14px radius, translucent white fill, charcoal-line border) showing the running takeoff count and total, with the material-costs-only line beneath.
+Charcoal block with yellow brand mark and wordmark, Display headline, and a tappable strip (14px radius, charcoal-wash fill, charcoal-line border) showing the running takeoff count and total, with the material-costs-only line beneath.
 
 ### Tags and icon tiles
-Pill tags: Adjusted (amber on amber wash) and Planned (muted on sand-alt). Icon tiles: yellow with ink glyph, muted, or charcoal with yellow glyph.
+Pill tag: Adjusted (amber on amber wash), shown beside any manually changed quantity. Icon tiles: yellow with ink glyph, muted, or charcoal with yellow glyph; each of the eight work sections has its own glyph.
 
 ## Do's and Don'ts
 
@@ -262,10 +303,15 @@ Pill tags: Adjusted (amber on amber wash) and Planned (muted on sand-alt). Icon 
 - **Do** build new surfaces from Screen, Card, Txt variants, Button, Field, Options, Tag, IconTile in `src/components/ui/kit.tsx`; read colors through `useColors`, never hard-code hex.
 - **Do** design every surface for both light and dark schemes.
 - **Do** use BuildcalcIcon stencil icons at 20-24px, inside tiles for section identity.
+- **Do** drive layout from `useWindowClass`, and give every repeated control a spoken label that includes its group or material name.
+- **Do** choose chips for at most three short options and the dropdown for everything longer, via `Choices`.
+- **Do** keep every tap target at 48px or more and keep the exclusions sentence beside every total.
 
 ### Don't:
 - **Don't** return to the flat, square, no-shadow ruled-paper look; corners below 10px and document-with-tabs layouts are off-system.
 - **Don't** use yellow as text on light surfaces or as a decorative accent.
 - **Don't** add hard offset shadows, glows, or shadows in dark mode.
 - **Don't** introduce a third typeface or system display faces.
+- **Don't** stretch the phone layout on tablets or lock orientation; restructure with the rail and two panes instead.
+- **Don't** hard-code colors such as scrims or washes; add a theme token.
 - **Don't** add unicode or emoji glyph icons.

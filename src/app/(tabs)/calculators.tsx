@@ -42,7 +42,7 @@ export default function CalculatorsScreen() {
         <View style={styles.cardHead}>
           <IconTile name={active.icon} size={44} />
           <View style={{ flex: 1 }}>
-            <Txt v="heading">{active.title}</Txt>
+            <Txt v="heading">{active.detail}</Txt>
             <Txt tone="muted" v="caption">
               {active.calculators.length} calculators
             </Txt>

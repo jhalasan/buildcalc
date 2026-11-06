@@ -8,7 +8,7 @@ const subscribe = () => () => undefined;
 /**
  * Window size classes, driven by the window (not the device), so iPad Split View,
  * Android multi-window, foldables, and landscape all resolve the same way.
- * Breakpoints follow Material's window size classes: 600 and 840 dp.
+ * Breakpoints follow Material's window size classes: 600 and 840 dp. Expanded also needs 600 dp of height, so a phone in landscape keeps the bottom bar and a single pane.
  *
  * The first render (including server render and hydration on web) always reports
  * compact, so the markup matches before the real window size is known.
@@ -22,7 +22,7 @@ export function useWindowClass() {
   );
   const windowClass: WindowClass = !hydrated
     ? 'compact'
-    : width >= 840
+    : width >= 840 && height >= 600
       ? 'expanded'
       : width >= 600
         ? 'medium'

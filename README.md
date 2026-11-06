@@ -57,7 +57,3 @@ All prices and cost summaries use Philippine pesos (PHP) with `en-PH` number for
 - CHB mortar factors are 0.525 cement bags and 0.0438 m³ screened sand per m² for 4-inch blocks, or 1.013 bags and 0.0844 m³ per m² for 6-inch blocks.
 - Plaster quantities use the workbook factors for a nominal 16 mm layer and a 1:2 mix. Riprap uses the workbook's boulder, cement, and sand factors; its note specifies 15–25 kg stones with at least half over 20 kg.
 - These are workbook-based planning estimates, not verified engineering specifications or local supplier rates. The estimates do not include labor, reinforcement, or waste unless entered by the user or included in the CHB breakage allowance. Confirm quantities, mixes, dimensions, and applicable requirements with a qualified construction professional before ordering or building.
-
-## Planned modules
-
-The workbook also contains reinforcement, carpentry, roofing, tiling, painting, and formwork/scaffolding. Those modules are deferred to later phases; they are not yet available in the app.

@@ -1,8 +1,9 @@
 import Constants from 'expo-constants';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import BuildcalcIcon, { type BuildcalcIconName } from '@/components/buildcalc-icon';
-import { Card, Divider, Options, Txt } from '@/components/ui/kit';
+import { Button, Card, Divider, Options, Txt } from '@/components/ui/kit';
 import { Screen } from '@/components/ui/screen';
 import { useColors } from '@/hooks/use-colors';
 import { useEstimateStore, type AppearancePreference } from '@/store/estimate-store';
@@ -30,7 +31,15 @@ function InfoRow({ icon, label, value }: { icon: BuildcalcIconName; label: strin
 }
 
 export default function SettingsScreen() {
-  const { appearance, setAppearance } = useEstimateStore();
+  const { appearance, setAppearance, prices, clearPrices } = useEstimateStore();
+  const [confirmClear, setConfirmClear] = useState(false);
+  const savedPriceCount = Object.values(prices).filter((value) => value.trim() !== '').length;
+
+  useEffect(() => {
+    if (!confirmClear) return;
+    const timer = setTimeout(() => setConfirmClear(false), 4000);
+    return () => clearTimeout(timer);
+  }, [confirmClear]);
 
   return (
     <Screen>
@@ -67,6 +76,36 @@ export default function SettingsScreen() {
       </View>
 
       <View style={{ gap: 10 }}>
+        <Txt v="title">Saved on this device</Txt>
+        <Card style={{ gap: 12 }}>
+          <Txt tone="muted" v="caption">
+            Unit prices you type are kept for your next estimate, so you do not retype them. They
+            never leave this device, and the app does not supply any prices. Takeoffs are not saved.
+          </Txt>
+          <Button
+            disabled={savedPriceCount === 0}
+            icon="trash"
+            label={
+              confirmClear
+                ? 'Tap again to clear saved prices'
+                : savedPriceCount === 0
+                  ? 'No saved prices'
+                  : `Clear ${savedPriceCount} saved ${savedPriceCount === 1 ? 'price' : 'prices'}`
+            }
+            onPress={() => {
+              if (confirmClear) {
+                clearPrices();
+                setConfirmClear(false);
+              } else {
+                setConfirmClear(true);
+              }
+            }}
+            variant="danger"
+          />
+        </Card>
+      </View>
+
+      <View style={{ gap: 10 }}>
         <Txt v="title">About Buildcalc</Txt>
         <Card style={{ gap: 12 }}>
           <InfoRowPlain label="Version" value={Constants.expoConfig?.version ?? '1.0.0'} />
@@ -74,7 +113,7 @@ export default function SettingsScreen() {
           <Txt tone="muted" v="caption">
             Buildcalc estimates material quantities and material cost only, from dimensions and unit
             prices you enter. Labor, equipment, overhead, and other construction expenses are
-            excluded. Estimates are temporary and are not saved.
+            excluded. Takeoffs are temporary; only your appearance setting, unit prices, and recent calculators are saved on this device.
           </Txt>
           <Txt tone="muted" v="caption">
             Workbook-based planning estimates, not engineering approval. Verify material quantities,

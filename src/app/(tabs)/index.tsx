@@ -6,9 +6,10 @@ import BuildcalcIcon from '@/components/buildcalc-icon';
 import { Card, IconTile, lift, SectionTitle, Txt } from '@/components/ui/kit';
 import { Screen } from '@/components/ui/screen';
 import { Radius } from '@/constants/buildcalc-theme';
-import { MODULE_ORDER, MODULES } from '@/constants/calculators';
+import { findCalculator, MODULE_ORDER, MODULES } from '@/constants/calculators';
 import { useColors } from '@/hooks/use-colors';
 import { useEstimateSummary } from '@/hooks/use-estimate-summary';
+import { useEstimateStore } from '@/store/estimate-store';
 import { useWindowClass } from '@/hooks/use-window-class';
 import { formatMoney } from '@/utils/estimate-lines';
 
@@ -24,7 +25,12 @@ export default function HomeScreen() {
   const { width, isCompact } = useWindowClass();
   const tileBasis = !isCompact ? '23%' : width < 340 ? '100%' : '47%';
   const estimate = useEstimateSummary();
+  const { recent } = useEstimateStore();
   const count = estimate.entries.length;
+  const recentRows = recent
+    .slice(0, 2)
+    .map((item) => ({ ...item, calculator: findCalculator(item.module, item.calculatorId) }))
+    .filter((item) => item.calculator !== undefined);
 
   return (
     <Screen edges={['left', 'right']} contentStyle={{ paddingHorizontal: 0, paddingTop: 0 }} bottomPadding={24}>
@@ -77,6 +83,43 @@ export default function HomeScreen() {
       </View>
 
       <View style={styles.body}>
+        {recentRows.length > 0 ? (
+          <View style={{ gap: 12 }}>
+            <SectionTitle title="Continue" />
+            <Card style={{ padding: 0, overflow: 'hidden' }}>
+              {recentRows.map((item, index) => (
+                <View key={`${item.module}-${item.calculatorId}`}>
+                  {index > 0 ? (
+                    <View style={{ height: StyleSheet.hairlineWidth * 2, backgroundColor: c.line }} />
+                  ) : null}
+                  <Pressable
+                    accessibilityHint="Opens this calculator"
+                    accessibilityRole="button"
+                    onPress={() =>
+                      router.push({
+                        pathname: '/calculator/[module]/[id]',
+                        params: { module: item.module, id: item.calculatorId },
+                      })
+                    }
+                    style={({ pressed }) => [
+                      styles.recentRow,
+                      { backgroundColor: pressed ? c.pressed : 'transparent' },
+                    ]}>
+                    <IconTile name={MODULES[item.module].icon} size={40} />
+                    <View style={{ flex: 1, gap: 1 }}>
+                      <Txt v="bodyStrong">{item.calculator?.label}</Txt>
+                      <Txt tone="muted" v="caption">
+                        {MODULES[item.module].title}
+                      </Txt>
+                    </View>
+                    <BuildcalcIcon color={c.inkMuted} name="chevron-right" size={20} />
+                  </Pressable>
+                </View>
+              ))}
+            </Card>
+          </View>
+        ) : null}
+
         <View style={{ gap: 12 }}>
           <SectionTitle detail="Choose a work section to see its calculators." title="Start a takeoff" />
           <View style={styles.grid}>
@@ -176,6 +219,14 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  recentRow: {
+    minHeight: 64,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   step: { flexDirection: 'row', gap: 12, alignItems: 'flex-start' },
   stepNumber: { width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
   notice: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', paddingHorizontal: 4 },

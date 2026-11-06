@@ -69,8 +69,12 @@ function CalculatorScreen({
   const insets = useSafeAreaInsets();
   const { isExpanded, height } = useWindowClass();
   const isShort = height < 480;
-  const { prices, takeoffs, setPrice, saveTakeoff } = useEstimateStore();
+  const { prices, takeoffs, setPrice, saveTakeoff, rememberCalculator } = useEstimateStore();
   const saved = takeoffs.find((item) => item.id === takeoffId);
+
+  useEffect(() => {
+    rememberCalculator(module, calculator.id);
+  }, [module, calculator.id, rememberCalculator]);
 
   const [values, setValues] = useState<EstimateValues>(
     () => saved?.values ?? getInitialValues(calculator.fields)

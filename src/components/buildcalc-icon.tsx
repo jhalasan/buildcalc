@@ -27,7 +27,11 @@ export type BuildcalcIconName =
   | 'tiling'
   | 'trash'
   | 'edit'
-  | 'phone';
+  | 'phone'
+  | 'share'
+  | 'search'
+  | 'close'
+  | 'copy';
 
 type BuildcalcIconProps = {
   name: BuildcalcIconName;
@@ -65,6 +69,10 @@ const ICON_PATHS: Record<BuildcalcIconName, string> = {
   sun: 'M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zM12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4',
   tiling: 'M4 4h16v16H4zM12 4v16M4 12h16',
   trash: 'M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6',
+  share: 'M12 15V4M8 8l4-4 4 4M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7',
+  search: 'M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM20 20l-4-4',
+  close: 'M6 6l12 12M18 6L6 18',
+  copy: 'M9 9h10a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1zM16 9V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3',
 };
 
 export default function BuildcalcIcon({

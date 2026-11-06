@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, Share, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import BuildcalcIcon from '@/components/buildcalc-icon';
@@ -9,6 +9,7 @@ import { Screen, useSheetWidth } from '@/components/ui/screen';
 import { useColors } from '@/hooks/use-colors';
 import { useEstimateSummary } from '@/hooks/use-estimate-summary';
 import { useEstimateStore } from '@/store/estimate-store';
+import { buildEstimateText } from '@/utils/estimate-text';
 import {
   formatMoney,
   formatNumber,
@@ -29,10 +30,11 @@ type CombinedMaterial = {
 export default function EstimateScreen() {
   const c = useColors();
   const insets = useSafeAreaInsets();
-  const { prices, setPrice, removeTakeoff, clearEstimate } = useEstimateStore();
+  const { prices, setPrice, removeTakeoff, duplicateTakeoff, clearEstimate } = useEstimateStore();
   const estimate = useEstimateSummary();
   const [confirmClear, setConfirmClear] = useState(false);
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | undefined>();
+  const [shareNote, setShareNote] = useState<string | undefined>();
   const sheetWidth = useSheetWidth();
 
   useEffect(() => {
@@ -46,6 +48,31 @@ export default function EstimateScreen() {
     const timer = setTimeout(() => setConfirmRemoveId(undefined), 4000);
     return () => clearTimeout(timer);
   }, [confirmRemoveId]);
+
+  useEffect(() => {
+    if (!shareNote) return;
+    const timer = setTimeout(() => setShareNote(undefined), 4000);
+    return () => clearTimeout(timer);
+  }, [shareNote]);
+
+  async function shareEstimate() {
+    const message = buildEstimateText(estimate.entries, estimate.total, estimate.missingPriceCount);
+    try {
+      await Share.share({ message, title: 'Buildcalc material estimate' });
+    } catch {
+      // Browsers without the share sheet: copy to the clipboard instead.
+      try {
+        if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.clipboard) {
+          await navigator.clipboard.writeText(message);
+          setShareNote('Estimate copied to the clipboard.');
+          return;
+        }
+      } catch {
+        // fall through to the message below
+      }
+      setShareNote('Sharing is not available on this device.');
+    }
+  }
 
   const materials = useMemo(() => {
     const map = new Map<string, CombinedMaterial>();
@@ -86,8 +113,9 @@ export default function EstimateScreen() {
             No takeoffs in this estimate
           </Txt>
           <Txt style={{ textAlign: 'center' }} tone="muted">
-            Open a calculator, enter measurements, then choose Add to estimate. Estimates are
-            temporary and clear when you close the app.
+            Open a calculator, enter measurements, then choose Add to estimate. Takeoffs are
+            temporary and clear when you close the app. Unit prices you enter are saved on this
+            device.
           </Txt>
           <Button label="Browse calculators" onPress={() => router.navigate('/calculators')} />
         </Card>
@@ -133,7 +161,9 @@ export default function EstimateScreen() {
     <Screen footer={footer}>
       <View style={{ gap: 4 }}>
         <Txt v="display">Estimate</Txt>
-        <Txt tone="muted">Temporary for this session. It clears when you close the app.</Txt>
+        <Txt tone="muted">
+          Takeoffs clear when you close the app. Unit prices are saved on this device.
+        </Txt>
       </View>
 
       <View style={{ gap: 10 }}>
@@ -243,7 +273,14 @@ export default function EstimateScreen() {
                     },
                   })
                 }
-                style={{ flex: 1, minHeight: 48 }}
+                style={{ flex: 1, minHeight: 48, minWidth: 96 }}
+                variant="secondary"
+              />
+              <Button
+                icon="copy"
+                label="Duplicate"
+                onPress={() => duplicateTakeoff(entry.saved.id)}
+                style={{ flex: 1, minHeight: 48, minWidth: 96 }}
                 variant="secondary"
               />
               <Button
@@ -257,7 +294,7 @@ export default function EstimateScreen() {
                     setConfirmRemoveId(entry.saved.id);
                   }
                 }}
-                style={{ flex: 1, minHeight: 48 }}
+                style={{ flex: 1, minHeight: 48, minWidth: 96 }}
                 variant={confirmRemoveId === entry.saved.id ? 'danger' : 'secondary'}
               />
             </View>
@@ -269,12 +306,23 @@ export default function EstimateScreen() {
           onPress={() => router.navigate('/calculators')}
           variant="secondary"
         />
+        <Button
+          accessibilityHint="Opens the share sheet with a plain text copy of this estimate"
+          icon="share"
+          label="Share estimate"
+          onPress={shareEstimate}
+        />
+        {shareNote ? (
+          <Txt accessibilityLiveRegion="polite" tone="muted" v="caption">
+            {shareNote}
+          </Txt>
+        ) : null}
       </View>
 
       <View style={{ gap: 12 }}>
         <Button
           icon="trash"
-          label={confirmClear ? 'Tap again to clear estimate and prices' : 'Clear estimate'}
+          label={confirmClear ? 'Tap again to clear all takeoffs' : 'Clear all takeoffs'}
           onPress={() => {
             if (confirmClear) {
               clearEstimate();
@@ -316,6 +364,6 @@ const styles = StyleSheet.create({
   takeoffHead: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   lines: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 10, gap: 6 },
   lineRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  actions: { flexDirection: 'row', gap: 16 },
+  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   notice: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', paddingHorizontal: 4 },
 });

@@ -295,6 +295,9 @@ Charcoal block with yellow brand mark and wordmark, Display headline, and a tapp
 ### Material basis line
 Under the Calculated quantity, a Caption in muted ink reads "How: …" with the formula in words (for example "Concrete volume × 0.5, rounded up to 0.1 m³"). Every material carries one, and a test enforces it.
 
+### Planning notice
+The planning-estimate notice lives behind a 44px info button, not on the page: top right of the Home masthead, and at the end of the Total Estimated Material Cost label on the sticky bar of the Estimate tab and every calculator. It opens a centered dialog with the full notice and a Got it button. The exclusions sentence stays visible beside every total.
+
 ### Undo bar
 After Remove or Clear all, a charcoal bar (14px radius, charcoal-line border, 56px high) sits above the sticky total with the message and a 44px yellow Undo button. It stays seven seconds, then goes. Undo puts takeoffs back at their old positions. There is no confirm step; undo replaces it.
 
@@ -305,7 +308,7 @@ The Calculators tab opens with a 52px search field (field fill, control stroke, 
 Motion is short and functional: totals ease to their new value over about 0.4 s, takeoff cards fade up on entry and glide when one leaves, and buttons dip to 98% on press. Haptics are light: success on add, selection on dropdown choice, a light tap for duplicate, a warning on remove. All of it is skipped on web, and the total does not animate with reduce motion or a screen reader on.
 
 ### Tags and icon tiles
-The app mark is three yellow running-bond brick courses on charcoal, used for the launcher icon, adaptive icon layers, splash, and favicon. Pill tag: Adjusted (amber on amber wash), shown beside any manually changed quantity. Icon tiles: yellow with ink glyph, muted, or charcoal with yellow glyph; each of the eight work sections has its own glyph.
+The app mark is a yellow framing square holding one block, on charcoal, used for the launcher icon, adaptive icon layers, splash, favicon, and the Home masthead tile (ink on yellow there). Below 32 px the tick marks are dropped. Pill tag: Adjusted (amber on amber wash), shown beside any manually changed quantity. Icon tiles: yellow with ink glyph, muted, or charcoal with yellow glyph; each of the eight work sections has its own glyph.
 
 ## Do's and Don'ts
 

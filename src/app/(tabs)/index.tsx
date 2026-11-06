@@ -2,7 +2,9 @@ import { router } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import BrandMark from '@/components/brand-mark';
 import BuildcalcIcon from '@/components/buildcalc-icon';
+import PlanningNotice from '@/components/planning-notice';
 import { Card, IconTile, lift, SectionTitle, Txt } from '@/components/ui/kit';
 import { Screen } from '@/components/ui/screen';
 import { Radius } from '@/constants/buildcalc-theme';
@@ -37,11 +39,12 @@ export default function HomeScreen() {
       <View style={[styles.masthead, { backgroundColor: c.charcoal, paddingTop: insets.top + 20 }]}>
         <View style={styles.brandRow}>
           <View style={[styles.mark, { backgroundColor: c.yellow }]}>
-            <BuildcalcIcon color={c.onYellow} name="ruler" size={22} strokeWidth={2.2} />
+            <BrandMark color={c.onYellow} size={36} />
           </View>
-          <Txt tone="yellow" v="title">
+          <Txt style={{ flex: 1 }} tone="yellow" v="title">
             BuildCalc
           </Txt>
+          <PlanningNotice onCharcoal />
         </View>
         <Txt style={styles.headline} tone="onCharcoal" v="display">
           Measure the work.{'\n'}Price the materials.
@@ -175,14 +178,6 @@ export default function HomeScreen() {
         </Card>
         ) : null}
 
-        <View style={styles.notice}>
-          <BuildcalcIcon color={c.inkMuted} name="info" size={20} />
-          <Txt style={{ flex: 1 }} tone="muted" v="caption">
-            Workbook-based planning estimates, not engineering approval. Verify material quantities,
-            mixes, and specifications with a qualified construction professional before ordering or
-            building.
-          </Txt>
-        </View>
       </View>
     </Screen>
   );
@@ -229,5 +224,4 @@ const styles = StyleSheet.create({
   },
   step: { flexDirection: 'row', gap: 12, alignItems: 'flex-start' },
   stepNumber: { width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
-  notice: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', paddingHorizontal: 4 },
 });

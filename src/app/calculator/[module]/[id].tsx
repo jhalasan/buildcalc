@@ -24,6 +24,7 @@ import {
   type CalculatorDefinition,
 } from '@/constants/calculators';
 import { useAnnounce } from '@/hooks/use-announce';
+import PlanningNotice from '@/components/planning-notice';
 import { useColors } from '@/hooks/use-colors';
 import { useTickedNumber } from '@/hooks/use-ticked-number';
 import { useWindowClass } from '@/hooks/use-window-class';
@@ -167,9 +168,12 @@ function CalculatorScreen({
             <View style={[styles.footerInner, { maxWidth: isExpanded ? 1200 : SHEET_MAX_WIDTH }]}>
               <View style={styles.totalRow}>
                 <View style={{ flexGrow: 1, flexBasis: 170 }}>
-                  <Txt tone="onCharcoalMuted" v="label">
-                    Total Estimated Material Cost
-                  </Txt>
+                  <View style={styles.labelRow}>
+                    <Txt style={{ flex: 1 }} tone="onCharcoalMuted" v="label">
+                      Total Estimated Material Cost
+                    </Txt>
+                    <PlanningNotice onCharcoal />
+                  </View>
                   <Txt
                     accessibilityLiveRegion="polite"
                     adjustsFontSizeToFit
@@ -338,11 +342,6 @@ function CalculatorScreen({
           </Card>
         )}
 
-        <Txt tone="faint" v="caption">
-          Workbook-based planning estimates, not engineering approval. Verify material quantities,
-          mixes, and specifications with a qualified construction professional before ordering or
-          building.
-        </Txt>
     </>
   );
 
@@ -504,6 +503,7 @@ function MaterialCard({
 }
 
 const styles = StyleSheet.create({
+  labelRow: { flexDirection: 'row', alignItems: 'center', marginVertical: -10 },
   header: { borderBottomWidth: StyleSheet.hairlineWidth, alignItems: 'center' },
   headerInner: {
     width: '100%',

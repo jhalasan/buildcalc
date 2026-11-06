@@ -4,7 +4,7 @@ import { Platform, Share, StyleSheet, View } from 'react-native';
 import Animated, { FadeInDown, FadeOut, LinearTransition } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import BuildcalcIcon from '@/components/buildcalc-icon';
+import PlanningNotice from '@/components/planning-notice';
 import { Button, Card, Divider, Field, IconTile, Tag, Txt } from '@/components/ui/kit';
 import { Screen, useSheetWidth } from '@/components/ui/screen';
 import { useColors } from '@/hooks/use-colors';
@@ -177,9 +177,12 @@ export default function EstimateScreen() {
         { backgroundColor: c.charcoal, paddingBottom: Math.max(insets.bottom, 0) + 12 },
       ]}>
       <View style={[styles.footerInner, { maxWidth: sheetWidth - 32 }]}>
-        <Txt tone="onCharcoalMuted" v="label">
-          Total Estimated Material Cost
-        </Txt>
+        <View style={styles.labelRow}>
+          <Txt style={{ flex: 1 }} tone="onCharcoalMuted" v="label">
+            Total Estimated Material Cost
+          </Txt>
+          <PlanningNotice onCharcoal />
+        </View>
         <Txt
           accessibilityLiveRegion="polite"
           adjustsFontSizeToFit
@@ -368,14 +371,6 @@ export default function EstimateScreen() {
           onPress={clearAll}
           variant="danger"
         />
-        <View style={styles.notice}>
-          <BuildcalcIcon color={c.inkMuted} name="info" size={20} />
-          <Txt style={{ flex: 1 }} tone="muted" v="caption">
-            Workbook-based planning estimates, not engineering approval. Verify material quantities,
-            mixes, and specifications with a qualified construction professional before ordering or
-            building.
-          </Txt>
-        </View>
       </View>
     </Screen>
   );
@@ -404,6 +399,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   undoButton: { minHeight: 44, paddingHorizontal: 16 },
+  labelRow: { flexDirection: 'row', alignItems: 'center', marginVertical: -10 },
   footerInner: { width: '100%', maxWidth: 640, gap: 2 },
   empty: { alignItems: 'center', gap: 14, paddingVertical: 28 },
   material: { padding: 16, gap: 10 },
@@ -415,5 +411,4 @@ const styles = StyleSheet.create({
   lines: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 10, gap: 6 },
   lineRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
-  notice: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', paddingHorizontal: 4 },
 });

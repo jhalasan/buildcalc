@@ -292,8 +292,20 @@ White card per material: name and Calculated quantity on the left, the final qua
 ### Masthead and estimate strip (signature)
 Charcoal block with yellow brand mark and wordmark, Display headline, and a tappable strip (14px radius, charcoal-wash fill, charcoal-line border) showing the running takeoff count and total, with the material-costs-only line beneath.
 
+### Material basis line
+Under the Calculated quantity, a Caption in muted ink reads "How: …" with the formula in words (for example "Concrete volume × 0.5, rounded up to 0.1 m³"). Every material carries one, and a test enforces it.
+
+### Undo bar
+After Remove or Clear all, a charcoal bar (14px radius, charcoal-line border, 56px high) sits above the sticky total with the message and a 44px yellow Undo button. It stays seven seconds, then goes. Undo puts takeoffs back at their old positions. There is no confirm step; undo replaces it.
+
+### Search and Continue
+The Calculators tab opens with a 52px search field (field fill, control stroke, search and clear icons) that filters every calculator across all eight sections. Home shows up to two recent calculators as 64px rows in one card under a Continue heading.
+
+### Motion and haptics
+Motion is short and functional: totals ease to their new value over about 0.4 s, takeoff cards fade up on entry and glide when one leaves, and buttons dip to 98% on press. Haptics are light: success on add, selection on dropdown choice, a light tap for duplicate, a warning on remove. All of it is skipped on web, and the total does not animate with reduce motion or a screen reader on.
+
 ### Tags and icon tiles
-Pill tag: Adjusted (amber on amber wash), shown beside any manually changed quantity. Icon tiles: yellow with ink glyph, muted, or charcoal with yellow glyph; each of the eight work sections has its own glyph.
+The app mark is three yellow running-bond brick courses on charcoal, used for the launcher icon, adaptive icon layers, splash, and favicon. Pill tag: Adjusted (amber on amber wash), shown beside any manually changed quantity. Icon tiles: yellow with ink glyph, muted, or charcoal with yellow glyph; each of the eight work sections has its own glyph.
 
 ## Do's and Don'ts
 
@@ -306,6 +318,8 @@ Pill tag: Adjusted (amber on amber wash), shown beside any manually changed quan
 - **Do** drive layout from `useWindowClass`, and give every repeated control a spoken label that includes its group or material name.
 - **Do** choose chips for at most three short options and the dropdown for everything longer, via `Choices`.
 - **Do** keep every tap target at 48px or more and keep the exclusions sentence beside every total.
+- **Do** make destructive actions reversible with the Undo bar instead of a confirm step, and give every material a "How" basis line.
+- **Do** route haptics through `haptic` in `src/utils/haptics.ts` and animate numbers with `useTickedNumber`, so reduce motion is honored.
 
 ### Don't:
 - **Don't** return to the flat, square, no-shadow ruled-paper look; corners below 10px and document-with-tabs layouts are off-system.

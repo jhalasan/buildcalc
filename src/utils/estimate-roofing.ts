@@ -11,6 +11,7 @@ function sheetItem(length: string, quantity: number): MaterialTakeoffItem {
     id: `roof-sheet-${length}ft`,
     label: `Roof sheet · ${length} ft`,
     quantity,
+    basis: 'Sheets per roof side × number of sides',
     unit: 'pcs',
     unitPriceLabel: `Roof sheet ${length} ft · per sheet`,
   };
@@ -68,6 +69,7 @@ function roofSheets(
     id: 'umbrella-nails-kg',
     label: 'Umbrella nails / tekscrews',
     quantity: roundUp(nailTotal / 120),
+    basis: 'Nails per sheet × sheets ÷ 120 per kg, rounded up',
     unit: 'kg',
     unitPriceLabel: 'Umbrella nails or tekscrews · per kg',
   });
@@ -112,6 +114,7 @@ export function calculateRoofingTakeoff(
         id: 'roof-accessory-pcs',
         label: 'Roof accessories',
         quantity: roundUp(covered / effective),
+        basis: 'Covered length ÷ effective length per piece, rounded up',
         unit: 'pcs',
         unitPriceLabel: 'Roof accessory · per piece',
       },

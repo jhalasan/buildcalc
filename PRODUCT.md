@@ -38,6 +38,10 @@ The initial workflow is a quick, mobile-friendly estimate: choose a construction
 - Roofing: two- or three-sheet roof runs (8, 10, or 12 ft sheets) with umbrella nails, and roof accessories.
 - Tiling: 16 tile sizes with the workbook's breakage-inclusive piece count, cement mortar or adhesive, and white cement. Painting: gallons from area, coverage, and coats. Scaffoldings and forms: column forms, beam forms, and staging lumber.
 - Each workbook-based module shows its factors as assumptions. Where the workbook has an apparent error or an unused input, the assumptions say how the estimate differs (two-bay beam stirrups and bottom bars, painting coat multiplier, footing matting rounding, one calculator per log count). Concrete canal is not included.
+- Saved on the device: unit prices the user types (never supplied by the app), the appearance setting, and the last three calculators opened. Takeoffs are not saved; they clear when the app closes. Settings can clear the saved prices. There are no accounts, saved estimates, labor, or budgets.
+- Each material shows a one-line "How" basis for its quantity, such as "Concrete volume × 0.5, rounded up to 0.1 m³", so users can check the math against the assumptions.
+- Estimate tab: duplicate a takeoff, remove one or clear all with an Undo bar for seven seconds, and share a plain-text copy of the estimate. The shared text carries the exclusions sentence and the planning notice, and never invents a price. The Calculators tab can search every calculator, and Home offers recent calculators.
+- Feedback: light haptics on add, duplicate, remove and dropdown choices, and totals that ease to a new value. Motion and haptics are skipped on web, and totals do not animate when reduce motion or a screen reader is on.
 - Estimates do not include labor, equipment, overhead, structural design, or supplier rates. Wall area in masonry calculations subtracts entered window and door openings.
 - Filipino language support, independently validated engineering factors, and region-specific material rates have not been provided.
 

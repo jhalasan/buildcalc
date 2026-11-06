@@ -46,6 +46,7 @@ export type EstimateLine = {
   unit: string;
   unitPriceLabel: string;
   wastageAllowed: boolean;
+  basis: string | undefined;
   calculatedQuantity: number;
   quantity: number | undefined;
   override: string;
@@ -108,6 +109,7 @@ export function buildLines(
       unit: item.unit,
       unitPriceLabel: item.unitPriceLabel,
       wastageAllowed,
+      basis: item.basis,
       calculatedQuantity: item.quantity,
       quantity,
       override,

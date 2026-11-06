@@ -20,8 +20,9 @@ Open the QR code in Expo Go, or press `w` in the terminal to open the web versio
 Home shows the current in-session estimate and a grid of all eight work sections.
 The Calculators tab lists each section's calculators, Estimate combines the takeoffs
 you add with one price per material, and Settings holds appearance and about
-information. Estimates are temporary and are not saved. No sample estimate or price
-is shown as user data.
+information. Takeoffs are temporary and clear when the app closes. Unit prices you type are saved
+on this device, along with your appearance setting and recent calculators. No sample
+estimate or price is shown as user data.
 
 ## Modules in this release
 

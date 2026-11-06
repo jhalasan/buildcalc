@@ -408,6 +408,11 @@ function MaterialCard({
           <Txt tone="muted" v="caption">
             Calculated · {formatQuantity(line.calculatedQuantity, line.unit)}
           </Txt>
+          {line.basis ? (
+            <Txt tone="muted" v="caption">
+              How: {line.basis}
+            </Txt>
+          ) : null}
         </View>
         <View style={{ alignItems: 'flex-end', flexShrink: 1, maxWidth: '55%' }}>
           <Txt adjustsFontSizeToFit minimumFontScale={0.6} numberOfLines={1} v="bigFigure" style={{ fontSize: 30, lineHeight: 32 }}>

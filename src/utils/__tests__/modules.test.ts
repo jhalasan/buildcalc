@@ -134,3 +134,26 @@ describe('concrete: regression', () => {
     expect(run('concrete', 'footing', { length: value, width: '1', thickness: '0.5', quantity: '1' })).toBeUndefined();
   });
 });
+
+describe('material basis', () => {
+  it('explains how every material quantity is worked out', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { MODULE_ORDER, MODULES, getInitialValues } = require('../../constants/calculators');
+    const missing: string[] = [];
+    let checked = 0;
+    for (const module of MODULE_ORDER) {
+      for (const calculator of MODULES[module].calculators) {
+        const values = getInitialValues(calculator.fields);
+        for (const key of Object.keys(values)) if (values[key] === '') values[key] = '10';
+        const takeoff = calculateConstructionTakeoff(module, calculator.id, values);
+        if (!takeoff) continue;
+        checked += 1;
+        for (const item of takeoff.items) {
+          if (!item.basis) missing.push(`${module}/${calculator.id}/${item.id}`);
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(30);
+    expect(missing).toEqual([]);
+  });
+});

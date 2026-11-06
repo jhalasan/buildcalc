@@ -60,6 +60,8 @@ export type MaterialTakeoffItem = {
   unit: string;
   unitPriceLabel: string;
   wastageAllowed?: boolean;
+  /** One-line statement of how the quantity is worked out, shown beside the material. */
+  basis?: string;
 };
 
 export type EstimateMeasure = {
@@ -155,6 +157,7 @@ function concreteMaterials(volume: number, mixClass: ConcreteMixClass): Material
       id: 'cement-bag',
       label: 'Cement',
       quantity: roundUp(volume * mix.bagsPerCubicMetre),
+      basis: 'Concrete volume × bags per m³ for the mix class, rounded up',
       unit: 'bags',
       unitPriceLabel: 'Cement · per 50 kg bag',
     },
@@ -162,6 +165,7 @@ function concreteMaterials(volume: number, mixClass: ConcreteMixClass): Material
       id: 'sand-cubic-metre',
       label: 'Sand',
       quantity: roundUpToTenth(volume * 0.5),
+      basis: 'Concrete volume × 0.5, rounded up to 0.1 m³',
       unit: 'm³',
       unitPriceLabel: 'Sand · per m³',
     },
@@ -169,6 +173,7 @@ function concreteMaterials(volume: number, mixClass: ConcreteMixClass): Material
       id: 'gravel-cubic-metre',
       label: '3/4 in gravel',
       quantity: roundUpToTenth(volume),
+      basis: 'Concrete volume × 1, rounded up to 0.1 m³',
       unit: 'm³',
       unitPriceLabel: 'Gravel · per m³',
     },
@@ -327,6 +332,7 @@ function calculateMasonryTakeoff(
           id: 'chb-piece',
           label: 'Concrete hollow blocks',
           quantity: blockCount,
+          basis: 'Net wall area × 12.5 blocks per m² × (1 + breakage %), rounded up',
           unit: 'pcs',
           unitPriceLabel: 'CHB · per piece',
           wastageAllowed: false,
@@ -350,6 +356,7 @@ function calculateMasonryTakeoff(
         id: 'cement-bag',
         label: 'Cement',
         quantity: roundUp(area * cementFactor),
+        basis: 'Net wall area × cement factor for the block size, rounded up',
         unit: 'bags',
         unitPriceLabel: 'Cement · per 50 kg bag',
       },
@@ -357,6 +364,7 @@ function calculateMasonryTakeoff(
         id: 'sand-cubic-metre',
         label: 'Screened sand',
         quantity: roundUpToTenth(area * sandFactor),
+        basis: 'Net wall area × sand factor for the block size, rounded up to 0.1 m³',
         unit: 'm³',
         unitPriceLabel: 'Sand · per m³',
       },
@@ -382,6 +390,7 @@ function calculateMasonryTakeoff(
         id: 'cement-bag',
         label: 'Cement',
         quantity: roundUp(area * faceCount * 0.288),
+        basis: 'Net wall area × faces × 0.288 bag per m², rounded up',
         unit: 'bags',
         unitPriceLabel: 'Cement · per 50 kg bag',
       },
@@ -389,6 +398,7 @@ function calculateMasonryTakeoff(
         id: 'fine-sand-cubic-metre',
         label: 'Fine sand',
         quantity: roundUpToTenth(area * faceCount * 0.016),
+        basis: 'Net wall area × faces × 0.016 m³ per m², rounded up to 0.1 m³',
         unit: 'm³',
         unitPriceLabel: 'Fine sand · per m³',
       },
@@ -420,6 +430,7 @@ function calculateMasonryTakeoff(
         id: 'boulder-cubic-metre',
         label: 'Boulders',
         quantity: volume,
+        basis: 'Average section width × height × length',
         unit: 'm³',
         unitPriceLabel: 'Boulders · per m³',
       },
@@ -427,6 +438,7 @@ function calculateMasonryTakeoff(
         id: 'cement-bag',
         label: 'Cement',
         quantity: roundUp(volume * 2.574),
+        basis: 'Volume × 2.574 bags per m³, rounded up',
         unit: 'bags',
         unitPriceLabel: 'Cement · per 50 kg bag',
       },
@@ -434,6 +446,7 @@ function calculateMasonryTakeoff(
         id: 'sand-cubic-metre',
         label: 'Sand',
         quantity: roundUpToTenth(volume * 0.143),
+        basis: 'Volume × 0.143 m³ per m³, rounded up to 0.1 m³',
         unit: 'm³',
         unitPriceLabel: 'Sand · per m³',
       },

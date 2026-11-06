@@ -39,6 +39,7 @@ export function calculateCarpentryTakeoff(
         id: 'lumber-board-feet',
         label: 'Lumber',
         quantity: roundUpToTenth(boardFeet),
+        basis: '(Pieces × thickness × width × length) ÷ 12, rounded up to 0.1',
         unit: 'bd.ft',
         unitPriceLabel: 'Lumber · per board foot',
       },
@@ -65,6 +66,7 @@ export function calculateCarpentryTakeoff(
         id: 'round-log-board-feet',
         label: 'Round log',
         quantity: roundUpToTenth(boardFeet),
+        basis: 'Pieces × (diameter − 4)² × length ÷ 16, rounded up to 0.1',
         unit: 'bd.ft',
         unitPriceLabel: 'Round log · per board foot',
       },
@@ -97,6 +99,7 @@ export function calculateCarpentryTakeoff(
       id: `lumber-${w1}x${w2}x${lengthFt}`,
       label: `Lumber ${w1} x ${w2} x ${lengthFt} ft`,
       quantity: lumberPieces(boardFeet, w1, w2, lengthFt),
+      basis: 'Board feet (area × workbook factor) ÷ board feet per piece, rounded up',
       unit: 'pcs',
       unitPriceLabel: `Lumber ${w1} x ${w2} x ${lengthFt} ft · per piece`,
     });
@@ -104,6 +107,7 @@ export function calculateCarpentryTakeoff(
       id: 'nails-cw-2-5',
       label: '2 1/2 in CW nails',
       quantity: roundUpToTenth(area * 0.05),
+      basis: 'Framed area × 0.05 kg per m², rounded up to 0.1 kg',
       unit: 'kg',
       unitPriceLabel: '2 1/2 in CW nails · per kg',
     });
@@ -131,6 +135,7 @@ export function calculateCarpentryTakeoff(
       id: 'plywood-quarter-4x8',
       label: '1/4 in plywood, 4 ft x 8 ft',
       quantity: sheets,
+      basis: 'Area ÷ one sheet (×2 for both sides), rounded up',
       unit: 'pcs',
       unitPriceLabel: '1/4 in plywood 4 x 8 ft · per sheet',
     });
@@ -138,6 +143,7 @@ export function calculateCarpentryTakeoff(
       id: 'nails-cw-1',
       label: '1 in CW nails',
       quantity: roundUpToTenth(sheets * 0.055),
+      basis: 'Sheets × 0.055 kg, rounded up to 0.1 kg',
       unit: 'kg',
       unitPriceLabel: '1 in CW nails · per kg',
     });

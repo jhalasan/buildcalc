@@ -27,6 +27,7 @@ function lumberItem(id: string, w1: number, w2: number, lengthFt: number, pieces
     id,
     label: `Lumber ${w1} x ${w2} x ${lengthFt} ft`,
     quantity: pieces,
+    basis: 'Board feet needed ÷ board feet per piece, rounded up',
     unit: 'pcs',
     unitPriceLabel: `Lumber ${w1} x ${w2} x ${lengthFt} ft · per piece`,
   };
@@ -46,6 +47,7 @@ function formMaterials(
     id: 'plywood-form-4x8',
     label: 'Plywood, 4 ft x 8 ft',
     quantity: sheets,
+    basis: 'Form area ÷ one sheet, rounded up',
     unit: 'pcs',
     unitPriceLabel: 'Form plywood 4 x 8 ft · per sheet',
   });
@@ -53,6 +55,7 @@ function formMaterials(
     id: 'nails-cw-2-5',
     label: '2 1/2 in CW nails',
     quantity: roundUpToTenth(0.08 * area),
+    basis: 'Form area × 0.08 kg per m², rounded up to 0.1 kg',
     unit: 'kg',
     unitPriceLabel: '2 1/2 in CW nails · per kg',
   });
@@ -60,6 +63,7 @@ function formMaterials(
     id: 'nails-finishing-1',
     label: '1 in finishing nails',
     quantity: roundUpToTenth(area * 0.033),
+    basis: 'Form area × 0.033 kg per m², rounded up to 0.1 kg',
     unit: 'kg',
     unitPriceLabel: '1 in finishing nails · per kg',
   });
@@ -147,6 +151,7 @@ export function calculateFormsTakeoff(
       id: 'nails-cw-4',
       label: '#4 CW nails',
       quantity: roundUp(totalColumnHeight * 0.73),
+      basis: 'Total column height × 0.73 kg per m, rounded up',
       unit: 'kg',
       unitPriceLabel: '#4 CW nails · per kg',
     });

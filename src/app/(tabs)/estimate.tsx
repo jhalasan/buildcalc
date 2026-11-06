@@ -10,7 +10,7 @@ import { Screen, useSheetWidth } from '@/components/ui/screen';
 import { useColors } from '@/hooks/use-colors';
 import { useEstimateSummary } from '@/hooks/use-estimate-summary';
 import { useTickedNumber } from '@/hooks/use-ticked-number';
-import { useEstimateStore } from '@/store/estimate-store';
+import { useEstimateStore, type RemovedTakeoff } from '@/store/estimate-store';
 import { buildEstimateText } from '@/utils/estimate-text';
 import { haptic } from '@/utils/haptics';
 import {
@@ -33,24 +33,56 @@ type CombinedMaterial = {
 export default function EstimateScreen() {
   const c = useColors();
   const insets = useSafeAreaInsets();
-  const { prices, setPrice, removeTakeoff, duplicateTakeoff, clearEstimate } = useEstimateStore();
+  const { prices, takeoffs, setPrice, removeTakeoff, restoreTakeoffs, duplicateTakeoff, clearEstimate } =
+    useEstimateStore();
   const estimate = useEstimateSummary();
-  const [confirmClear, setConfirmClear] = useState(false);
-  const [confirmRemoveId, setConfirmRemoveId] = useState<string | undefined>();
+  const [undo, setUndo] = useState<{ message: string; items: RemovedTakeoff[] } | undefined>();
   const [shareNote, setShareNote] = useState<string | undefined>();
   const sheetWidth = useSheetWidth();
 
   useEffect(() => {
-    if (!confirmClear) return;
-    const timer = setTimeout(() => setConfirmClear(false), 4000);
+    if (!undo) return;
+    const timer = setTimeout(() => setUndo(undefined), 7000);
     return () => clearTimeout(timer);
-  }, [confirmClear]);
+  }, [undo]);
 
-  useEffect(() => {
-    if (!confirmRemoveId) return;
-    const timer = setTimeout(() => setConfirmRemoveId(undefined), 4000);
-    return () => clearTimeout(timer);
-  }, [confirmRemoveId]);
+  function remove(id: string, title: string) {
+    const index = takeoffs.findIndex((item) => item.id === id);
+    if (index === -1) return;
+    haptic.warning();
+    setUndo({ message: `Removed ${title}`, items: [{ takeoff: takeoffs[index], index }] });
+    removeTakeoff(id);
+  }
+
+  function clearAll() {
+    haptic.warning();
+    const count = takeoffs.length;
+    setUndo({
+      message: `Cleared ${count} ${count === 1 ? 'takeoff' : 'takeoffs'}`,
+      items: takeoffs.map((takeoff, index) => ({ takeoff, index })),
+    });
+    clearEstimate();
+  }
+
+  const undoBar = undo ? (
+    <View style={styles.undoWrap}>
+      <View style={[styles.undoBar, { backgroundColor: c.charcoal, borderColor: c.charcoalLine }]}>
+        <Txt accessibilityLiveRegion="polite" style={{ flex: 1 }} tone="onCharcoal" v="bodyStrong">
+          {undo.message}
+        </Txt>
+        <Button
+          label="Undo"
+          onPress={() => {
+            haptic.success();
+            restoreTakeoffs(undo.items);
+            setUndo(undefined);
+          }}
+          style={styles.undoButton}
+          surface="charcoal"
+        />
+      </View>
+    </View>
+  ) : null;
 
   useEffect(() => {
     if (!shareNote) return;
@@ -107,7 +139,7 @@ export default function EstimateScreen() {
 
   if (estimate.entries.length === 0) {
     return (
-      <Screen>
+      <Screen footer={undoBar ?? undefined}>
         <View style={{ gap: 4 }}>
           <Txt v="display">Estimate</Txt>
           <Txt tone="muted">Takeoffs you add are combined here with your unit prices.</Txt>
@@ -137,6 +169,8 @@ export default function EstimateScreen() {
         : formatMoney(tickedTotal ?? total);
 
   const footer = (
+    <View>
+    {undoBar}
     <View
       style={[
         styles.footer,
@@ -159,6 +193,7 @@ export default function EstimateScreen() {
           excluded.
         </Txt>
       </View>
+    </View>
     </View>
   );
 
@@ -298,19 +333,10 @@ export default function EstimateScreen() {
               />
               <Button
                 icon="trash"
-                label={confirmRemoveId === entry.saved.id ? 'Confirm' : 'Remove'}
-                onPress={() => {
-                  if (confirmRemoveId === entry.saved.id) {
-                    haptic.warning();
-                    removeTakeoff(entry.saved.id);
-                    setConfirmRemoveId(undefined);
-                  } else {
-                    haptic.light();
-                    setConfirmRemoveId(entry.saved.id);
-                  }
-                }}
+                label="Remove"
+                onPress={() => remove(entry.saved.id, entry.title)}
                 style={{ flex: 1, minHeight: 48, minWidth: 96 }}
-                variant={confirmRemoveId === entry.saved.id ? 'danger' : 'secondary'}
+                variant="secondary"
               />
             </View>
           </Card>
@@ -338,17 +364,8 @@ export default function EstimateScreen() {
       <View style={{ gap: 12 }}>
         <Button
           icon="trash"
-          label={confirmClear ? 'Tap again to clear all takeoffs' : 'Clear all takeoffs'}
-          onPress={() => {
-            if (confirmClear) {
-              haptic.warning();
-              clearEstimate();
-              setConfirmClear(false);
-            } else {
-              haptic.light();
-              setConfirmClear(true);
-            }
-          }}
+          label="Clear all takeoffs"
+          onPress={clearAll}
           variant="danger"
         />
         <View style={styles.notice}>
@@ -372,6 +389,21 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
+  undoWrap: { paddingHorizontal: 16, paddingBottom: 8, alignItems: 'center' },
+  undoBar: {
+    width: '100%',
+    maxWidth: 640,
+    minHeight: 56,
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingLeft: 16,
+    paddingRight: 6,
+    paddingVertical: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  undoButton: { minHeight: 44, paddingHorizontal: 16 },
   footerInner: { width: '100%', maxWidth: 640, gap: 2 },
   empty: { alignItems: 'center', gap: 14, paddingVertical: 28 },
   material: { padding: 16, gap: 10 },

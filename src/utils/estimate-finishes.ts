@@ -54,6 +54,7 @@ export function calculateTilingTakeoff(
     id: `tile-${size.value}`,
     label: `Tiles · ${sizeName}`,
     quantity: roundUp(area * size.perSqm * (1 + breakage / 100)),
+    basis: 'Area × tiles per m² × (1 + breakage %), rounded up',
     unit: 'pcs',
     unitPriceLabel: `${sizeName} tile · per piece`,
     wastageAllowed: false,
@@ -63,6 +64,7 @@ export function calculateTilingTakeoff(
       id: 'cement-bag',
       label: 'Cement mortar',
       quantity: roundUp(area * 0.086),
+      basis: 'Area × 0.086 bag per m², rounded up',
       unit: 'bags',
       unitPriceLabel: 'Cement · per 50 kg bag',
     });
@@ -71,6 +73,7 @@ export function calculateTilingTakeoff(
       id: 'tile-adhesive-bag',
       label: 'Tile adhesive',
       quantity: roundUp(area * 0.11),
+      basis: 'Area × 0.11 bag per m², rounded up',
       unit: 'bags',
       unitPriceLabel: 'Tile adhesive · per bag',
     });
@@ -79,6 +82,7 @@ export function calculateTilingTakeoff(
     id: 'white-cement-kg',
     label: 'White cement (grout)',
     quantity: roundUp(area * 0.5),
+    basis: 'Area × 0.5 kg per m², rounded up',
     unit: 'kg',
     unitPriceLabel: 'White cement · per kg',
   });
@@ -113,6 +117,7 @@ export function calculatePaintingTakeoff(
       id: `paint-${kind.value}-gal`,
       label: kind.label,
       quantity: roundUp((area / coverage) * coats),
+      basis: '(Area ÷ coverage per gallon) × coats, rounded up',
       unit: 'gal',
       unitPriceLabel: `${kind.label} · per gallon`,
     },

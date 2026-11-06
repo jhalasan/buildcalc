@@ -24,6 +24,9 @@ export type SavedTakeoff = {
   wastage: EstimateValues;
 };
 
+/** A takeoff taken out of the estimate, with where it was, so Undo can put it back. */
+export type RemovedTakeoff = { takeoff: SavedTakeoff; index: number };
+
 export type RecentCalculator = { module: EstimateModule; calculatorId: CalculatorId };
 
 type EstimateStore = {
@@ -36,6 +39,7 @@ type EstimateStore = {
   saveTakeoff: (takeoff: Omit<SavedTakeoff, 'id'> & { id?: string }) => string;
   duplicateTakeoff: (id: string) => void;
   removeTakeoff: (id: string) => void;
+  restoreTakeoffs: (items: readonly RemovedTakeoff[]) => void;
   clearEstimate: () => void;
   rememberCalculator: (module: EstimateModule, calculatorId: CalculatorId) => void;
   setAppearance: (preference: AppearancePreference) => void;
@@ -169,6 +173,17 @@ export function EstimateProvider({ children }: { children: ReactNode }) {
     setTakeoffs((current) => current.filter((item) => item.id !== id));
   }, []);
 
+  const restoreTakeoffs = useCallback((items: readonly RemovedTakeoff[]) => {
+    setTakeoffs((current) => {
+      const next = [...current];
+      for (const { takeoff, index } of [...items].sort((a, b) => a.index - b.index)) {
+        if (next.some((item) => item.id === takeoff.id)) continue;
+        next.splice(Math.min(index, next.length), 0, takeoff);
+      }
+      return next;
+    });
+  }, []);
+
   const clearEstimate = useCallback(() => setTakeoffs([]), []);
 
   const rememberCalculator = useCallback<EstimateStore['rememberCalculator']>(
@@ -201,6 +216,7 @@ export function EstimateProvider({ children }: { children: ReactNode }) {
       saveTakeoff,
       duplicateTakeoff,
       removeTakeoff,
+      restoreTakeoffs,
       clearEstimate,
       rememberCalculator,
       setAppearance,
@@ -215,6 +231,7 @@ export function EstimateProvider({ children }: { children: ReactNode }) {
       saveTakeoff,
       duplicateTakeoff,
       removeTakeoff,
+      restoreTakeoffs,
       clearEstimate,
       rememberCalculator,
       setAppearance,

@@ -65,6 +65,7 @@ export const TIE_WIRE = {
   label: '#16 tie wire',
   unit: 'kg',
   unitPriceLabel: '#16 tie wire · per kg',
+  basis: 'Workbook tie-wire factor for this member',
 } as const;
 
 export const REBAR_DIAMETERS = ['10', '12', '16', '20', '25'] as const;
@@ -74,6 +75,7 @@ export function rebarItem(diameter: string, quantity: number): MaterialTakeoffIt
     id: `rebar-${diameter}mm`,
     label: `${diameter} mm rebar`,
     quantity,
+    basis: 'Total bar length ÷ 6 m, rounded up',
     unit: 'pcs',
     unitPriceLabel: `${diameter} mm rebar · per 6 m bar`,
   };

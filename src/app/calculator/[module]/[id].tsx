@@ -25,8 +25,10 @@ import {
 } from '@/constants/calculators';
 import { useAnnounce } from '@/hooks/use-announce';
 import { useColors } from '@/hooks/use-colors';
+import { useTickedNumber } from '@/hooks/use-ticked-number';
 import { useWindowClass } from '@/hooks/use-window-class';
 import { useEstimateStore } from '@/store/estimate-store';
+import { haptic } from '@/utils/haptics';
 import {
   calculateConstructionTakeoff,
   type EstimateModule,
@@ -116,6 +118,7 @@ function CalculatorScreen({
 
   const blocked = summary === undefined || summary.hasInvalidInput || summary.hasCostOverflow;
 
+  const tickedTotal = useTickedNumber(summary?.total);
   let totalText: string;
   let totalReady = false;
   if (!summary) totalText = 'Enter measurements';
@@ -124,7 +127,7 @@ function CalculatorScreen({
   else if (summary.total === undefined) {
     totalText = `Enter ${summary.missingPriceCount} unit ${summary.missingPriceCount === 1 ? 'price' : 'prices'}`;
   } else {
-    totalText = formatMoney(summary.total);
+    totalText = formatMoney(tickedTotal ?? summary.total);
     totalReady = true;
   }
 
@@ -143,6 +146,7 @@ function CalculatorScreen({
     : undefined;
 
   function addToEstimate() {
+    haptic.success();
     savedIdRef.current = saveTakeoff({
       id: savedIdRef.current,
       module,

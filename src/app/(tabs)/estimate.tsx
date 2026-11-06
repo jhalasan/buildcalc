@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Platform, Share, StyleSheet, View } from 'react-native';
+import Animated, { FadeInDown, FadeOut, LinearTransition } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import BuildcalcIcon from '@/components/buildcalc-icon';
@@ -8,8 +9,10 @@ import { Button, Card, Divider, Field, IconTile, Tag, Txt } from '@/components/u
 import { Screen, useSheetWidth } from '@/components/ui/screen';
 import { useColors } from '@/hooks/use-colors';
 import { useEstimateSummary } from '@/hooks/use-estimate-summary';
+import { useTickedNumber } from '@/hooks/use-ticked-number';
 import { useEstimateStore } from '@/store/estimate-store';
 import { buildEstimateText } from '@/utils/estimate-text';
+import { haptic } from '@/utils/haptics';
 import {
   formatMoney,
   formatNumber,
@@ -100,6 +103,8 @@ export default function EstimateScreen() {
     return [...map.values()];
   }, [estimate.entries]);
 
+  const tickedTotal = useTickedNumber(estimate.total);
+
   if (estimate.entries.length === 0) {
     return (
       <Screen>
@@ -129,7 +134,7 @@ export default function EstimateScreen() {
       ? 'Fix fields in a takeoff'
       : total === undefined
         ? `Enter ${estimate.missingPriceCount} unit ${estimate.missingPriceCount === 1 ? 'price' : 'prices'}`
-        : formatMoney(total);
+        : formatMoney(tickedTotal ?? total);
 
   const footer = (
     <View
@@ -227,7 +232,12 @@ export default function EstimateScreen() {
       <View style={{ gap: 10 }}>
         <Txt v="title">Takeoffs</Txt>
         {estimate.entries.map((entry) => (
-          <Card key={entry.saved.id} style={{ gap: 12 }}>
+          <Animated.View
+            entering={FadeInDown.duration(260)}
+            exiting={FadeOut.duration(160)}
+            key={entry.saved.id}
+            layout={LinearTransition.duration(220)}>
+          <Card style={{ gap: 12 }}>
             <View style={styles.takeoffHead}>
               <View style={{ flex: 1, gap: 2 }}>
                 <Txt v="heading">{entry.title}</Txt>
@@ -279,7 +289,10 @@ export default function EstimateScreen() {
               <Button
                 icon="copy"
                 label="Duplicate"
-                onPress={() => duplicateTakeoff(entry.saved.id)}
+                onPress={() => {
+                  haptic.light();
+                  duplicateTakeoff(entry.saved.id);
+                }}
                 style={{ flex: 1, minHeight: 48, minWidth: 96 }}
                 variant="secondary"
               />
@@ -288,9 +301,11 @@ export default function EstimateScreen() {
                 label={confirmRemoveId === entry.saved.id ? 'Confirm' : 'Remove'}
                 onPress={() => {
                   if (confirmRemoveId === entry.saved.id) {
+                    haptic.warning();
                     removeTakeoff(entry.saved.id);
                     setConfirmRemoveId(undefined);
                   } else {
+                    haptic.light();
                     setConfirmRemoveId(entry.saved.id);
                   }
                 }}
@@ -299,6 +314,7 @@ export default function EstimateScreen() {
               />
             </View>
           </Card>
+          </Animated.View>
         ))}
         <Button
           icon="plus"
@@ -325,9 +341,11 @@ export default function EstimateScreen() {
           label={confirmClear ? 'Tap again to clear all takeoffs' : 'Clear all takeoffs'}
           onPress={() => {
             if (confirmClear) {
+              haptic.warning();
               clearEstimate();
               setConfirmClear(false);
             } else {
+              haptic.light();
               setConfirmClear(true);
             }
           }}

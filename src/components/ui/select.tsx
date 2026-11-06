@@ -15,6 +15,7 @@ import { Options, Txt } from '@/components/ui/kit';
 import { Fonts, Radius, SHEET_MAX_WIDTH } from '@/constants/buildcalc-theme';
 import { useColors } from '@/hooks/use-colors';
 import { useWindowClass } from '@/hooks/use-window-class';
+import { haptic } from '@/utils/haptics';
 
 export type SelectOption = { label: string; value: string };
 
@@ -118,6 +119,7 @@ export function Select({
                     accessibilityState={{ checked: isSelected }}
                     key={option.value}
                     onPress={() => {
+                      if (!isSelected) haptic.select();
                       onChange(option.value);
                       setOpen(false);
                     }}

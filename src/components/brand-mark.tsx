@@ -1,5 +1,5 @@
 import Svg, { Path, Rect } from 'react-native-svg';
-import type { ColorValue } from 'react-native';
+import { Platform, type ColorValue } from 'react-native';
 
 type BrandMarkProps = { size?: number; color: ColorValue };
 
@@ -7,9 +7,10 @@ type BrandMarkProps = { size?: number; color: ColorValue };
 export default function BrandMark({ size = 36, color }: BrandMarkProps) {
   return (
     <Svg
-      accessibilityElementsHidden
+      {...(Platform.OS === 'web'
+        ? { 'aria-hidden': true }
+        : { accessibilityElementsHidden: true, importantForAccessibility: 'no-hide-descendants' as const })}
       height={size}
-      importantForAccessibility="no-hide-descendants"
       pointerEvents="none"
       viewBox="12 12 72 72"
       width={size}>

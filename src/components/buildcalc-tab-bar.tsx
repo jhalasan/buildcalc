@@ -1,4 +1,5 @@
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -21,6 +22,7 @@ export default function BuildcalcTabBar({ state, navigateToTab }: BottomTabBarPr
   const insets = useSafeAreaInsets();
   const { isExpanded } = useWindowClass();
   const { takeoffs } = useEstimateStore();
+  const [ringKey, setRingKey] = useState<string | undefined>();
 
   return (
     <View
@@ -56,10 +58,31 @@ export default function BuildcalcTabBar({ state, navigateToTab }: BottomTabBarPr
               accessibilityRole="tab"
               accessibilityState={{ selected: focused }}
               key={route.key}
+              onBlur={() => setRingKey(undefined)}
+              onFocus={(event) => {
+                // Draw a ring only for keyboard focus, never after a tap or click.
+                const target = event.target as unknown as { matches?: (selector: string) => boolean };
+                setRingKey(target.matches?.(':focus-visible') ? route.key : undefined);
+              }}
               onPress={() => navigateToTab(route.key)}
-              style={isExpanded ? styles.railTab : styles.tab}>
-              <View style={[styles.pill, { backgroundColor: focused ? c.yellow : 'transparent' }]}>
-                <BuildcalcIcon color={focused ? c.onYellow : c.inkMuted} name={tab.icon} />
+              style={[isExpanded ? styles.railTab : styles.tab, styles.noOutline]}>
+              <View
+                style={[
+                  styles.pill,
+                  ringKey === route.key ? { borderWidth: 2, borderColor: c.focus } : null,
+                ]}>
+                {/* Mounted fresh when selected, so Android always draws it with its rounded corners
+                    rather than recoloring an existing view. */}
+                {focused ? (
+                  <View
+                    key={`fill-${route.key}`}
+                    pointerEvents="none"
+                    style={[styles.pillFill, { backgroundColor: c.yellow }]}
+                  />
+                ) : null}
+                <View style={{ zIndex: 1 }}>
+                  <BuildcalcIcon color={focused ? c.onYellow : c.inkMuted} name={tab.icon} />
+                </View>
                 {badge ? (
                   <View style={[styles.badge, { backgroundColor: c.charcoal, borderColor: c.surface }]}>
                     <Text style={[styles.badgeText, { color: c.yellow }]}>{badge}</Text>
@@ -92,6 +115,8 @@ const styles = StyleSheet.create({
   rail: { width: 104, borderRightWidth: StyleSheet.hairlineWidth, alignItems: 'center' },
   railList: { gap: 12, alignItems: 'center' },
   railTab: { width: 88, minHeight: 64, alignItems: 'center', justifyContent: 'center', gap: 3 },
+  // The browser's default focus box is square; the pill draws its own round ring instead.
+  noOutline: { outlineStyle: 'none' } as unknown as object,
   pill: {
     width: 64,
     height: 32,
@@ -99,6 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  pillFill: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 16 },
   label: { fontSize: 13, lineHeight: 16, textAlign: 'center' },
   badge: {
     position: 'absolute',
